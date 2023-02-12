@@ -22,6 +22,7 @@ class UniquelyIdHook : LoadPackageHandler {
     override fun onHook() {
         if (config.androidId.isNotBlank()) this.hookAndroidId()
         if (config.imei.isNotBlank()) this.hookImei()
+        if (config.phoneNum.isNotBlank()) this.hookPhoneNum()
     }
 
     private fun hookAndroidId() {

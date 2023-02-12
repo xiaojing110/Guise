@@ -1,8 +1,11 @@
 package com.houvven.guise.util.android
 
+import android.graphics.Point
+import android.graphics.PointF
 import java.util.Random
 import java.util.UUID
 import kotlin.math.roundToInt
+
 
 object Randoms {
 
@@ -93,4 +96,32 @@ object Randoms {
         }
         return phoneNum.toString()
     }
+
+    fun randomFingerPrint(): String {
+        val random = Random()
+        val fingerprint = StringBuilder()
+        fingerprint.append(randomString(5))
+        fingerprint.append("/")
+        fingerprint.append(randomString(6))
+        fingerprint.append("/")
+        fingerprint.append(randomString(4))
+        fingerprint.append(":")
+        fingerprint.append(randomInt(1))
+        fingerprint.append("/")
+        fingerprint.append(randomString(4))
+        fingerprint.append("/")
+        fingerprint.append(randomString(4))
+        fingerprint.append(":")
+        fingerprint.append("user/release-keys")
+        return fingerprint.toString()
+    }
+
+
+    fun randomLatLac(): PointF {
+        val random = Random()
+        val lat = random.nextInt(120) + random.nextFloat()
+        val lac = random.nextInt(30) + random.nextFloat()
+        return PointF(lat, lac)
+    }
+
 }

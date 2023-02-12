@@ -35,6 +35,9 @@ data class ModuleConfig(
     var randomOffset: Boolean = false,
     var makeWifiLocationFail: Boolean = false,
     var makeCellLocationFail: Boolean = false,
+
+    var versionCode: Int = -1,
+    var versionName: String = "",
     var batteryLevel: Int = -1,
     var screenshotsFlag: Int = HooksValue.SCREENSHOTS_UNHOOK,
     var hookSuccessHint: Boolean = false,

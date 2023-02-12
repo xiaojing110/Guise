@@ -118,8 +118,8 @@ private fun ConfigEditorItems(state: ModuleConfigState, launch: () -> Unit) {
             state.device.value = codeAlias
         }
     )
-    InputBox(state.product, stringResource(R.string.device_product))
     InputBox(state.device, stringResource(R.string.device_device))
+    InputBox(state.product, stringResource(R.string.device_product))
     InputBox(state.board, stringResource(R.string.device_board))
     InputBox(state.hardware, stringResource(R.string.device_cpu))
     PresetInputBox(
@@ -168,7 +168,10 @@ private fun ConfigEditorItems(state: ModuleConfigState, launch: () -> Unit) {
 
     Title(text = stringResource(R.string.title_unique_id))
     RandomInputBox(state.imei, stringResource(R.string.id_imei)) { Randoms.randomIMEI() }
-    RandomInputBox(state.phoneNum, stringResource(R.string.id_phone_num)) { Randoms.randomPhoneNum() }
+    RandomInputBox(
+        state.phoneNum,
+        stringResource(R.string.id_phone_num)
+    ) { Randoms.randomPhoneNum() }
     RandomInputBox(state.androidId, stringResource(R.string.id_ssaid)) { Randoms.randomIMEI() }
 
 
@@ -183,6 +186,11 @@ private fun ConfigEditorItems(state: ModuleConfigState, launch: () -> Unit) {
     ContainerSwitch(state.randomOffset, stringResource(R.string.location_offset))
     ContainerSwitch(state.makeWifiLocationFail, stringResource(R.string.location_wifi_fail))
     ContainerSwitch(state.makeCellLocationFail, label = "使基站位置信息失效") // TODO:  国际化
+
+
+    Title(text = stringResource(R.string.title_build_config))
+    InputBox(state.versionCode, stringResource(R.string.build_config_version_code))
+    InputBox(state.versionName, stringResource(R.string.build_config_version_name))
 
 
     Title(text = stringResource(R.string.title_other))

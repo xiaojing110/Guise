@@ -12,7 +12,7 @@ import com.houvven.ktx_xposed.utils.setNullResult
 class BlankPass : LoadPackageHandler {
 
     override fun onHook() {
-        mapOf(
+        listOf(
             config.passAudio to MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
             config.passVideo to MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
             config.passPhoto to MediaStore.Images.Media.EXTERNAL_CONTENT_URI,

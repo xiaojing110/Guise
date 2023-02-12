@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.houvven.guise.R
 import com.houvven.guise.ui.GlobalSnackbarHost
@@ -24,6 +25,7 @@ import com.houvven.guise.ui.components.SaveTemplate
 import com.houvven.guise.ui.components.simplify.SimplifyDropdownMenuItem
 import com.houvven.guise.ui.components.simplify.SimplifyIcon
 import com.houvven.guise.ui.routing.LocalNavController
+import com.houvven.guise.ui.utils.oneClickRandom
 import com.houvven.guise.xposed.config.ModuleConfig
 import com.houvven.guise.xposed.config.ModuleConfigManager
 
@@ -31,6 +33,7 @@ import com.houvven.guise.xposed.config.ModuleConfigManager
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DeployConfigEditScreen(name: String, packageName: String) {
+    val context = LocalContext.current
     val navHostController = LocalNavController.current
     val moduleConfigManager = ModuleConfigManager.of(ModuleConfig.get(packageName))
     val isSaveRequest = remember { mutableStateOf(false) }
@@ -83,6 +86,10 @@ fun DeployConfigEditScreen(name: String, packageName: String) {
                                     }
                                 }
                             }
+                        )
+                        SimplifyDropdownMenuItem(
+                            stringResource(R.string.one_click_random),
+                            onClick = { oneClickRandom(moduleConfigManager.state, context) }
                         )
                         SimplifyDropdownMenuItem(
                             text = stringResource(R.string.save_as_template),

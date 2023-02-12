@@ -37,6 +37,9 @@ class ModuleConfigState private constructor(moduleConfig: ModuleConfig) {
     lateinit var makeWifiLocationFail: MutableState<Boolean>
     lateinit var makeCellLocationFail: MutableState<Boolean>
 
+    lateinit var versionCode: MutableState<String>
+    lateinit var versionName: MutableState<String>
+
     lateinit var batteryLevel: MutableState<String>
     lateinit var language: MutableState<String>
     lateinit var screenshotsFlag: MutableState<String>

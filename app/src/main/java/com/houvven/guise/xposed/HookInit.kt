@@ -1,6 +1,5 @@
 package com.houvven.guise.xposed
 
-import android.telephony.TelephonyManager
 import com.houvven.guise.BuildConfig
 import com.houvven.guise.xposed.config.ModuleConfig
 import com.houvven.guise.xposed.hook.BatteryHook
@@ -14,7 +13,6 @@ import com.houvven.guise.xposed.hook.netowork.NetworkHook
 import com.houvven.guise.xposed.other.BlankPass
 import com.houvven.guise.xposed.other.HookSuccessHint
 import com.houvven.ktx_xposed.handler.HookLoadPackageHandler
-import com.houvven.ktx_xposed.hook.setMethodResult
 import com.houvven.ktx_xposed.logger.XposedLogger
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 

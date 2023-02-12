@@ -19,3 +19,7 @@ fun String.toBitmap(): Bitmap {
     val bytes = Base64.decode(this.split(",")[1], Base64.DEFAULT)
     return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 }
+
+fun runThread(block: () -> Unit) {
+    Thread(block).start()
+}
