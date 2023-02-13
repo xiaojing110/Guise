@@ -30,7 +30,7 @@ fun oneClickRandom(state: ModuleConfigState, context: Context) {
 
             Randoms.randomLatLac().let {
                 latitude.value = it.x.toString()
-                lac.value = it.y.toString()
+                longitude.value = it.y.toString()
             }
 
             SimPreset.values().random().value.split(":").let {
