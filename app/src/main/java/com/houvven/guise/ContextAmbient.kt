@@ -3,8 +3,10 @@ package com.houvven.guise
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
+import com.houvven.guise.lsposed.LsposedHelper
 import com.tencent.mmkv.MMKV
 import com.tencent.mmkv.MMKVLogLevel
+import java.io.File
 
 class ContextAmbient : Application() {
 
@@ -14,7 +16,7 @@ class ContextAmbient : Application() {
 
         fun getSharedPreferences(
             name: String = BuildConfig.APPLICATION_ID,
-            mode: Int = Context.MODE_PRIVATE
+            mode: Int = Context.MODE_PRIVATE,
         ) = current.getSharedPreferences(name, mode)
     }
 
@@ -22,6 +24,7 @@ class ContextAmbient : Application() {
         super.onCreate()
         current = applicationContext
         MMKV.initialize(this, MMKVLogLevel.LevelNone)
+        LsposedHelper.init(File(filesDir, "/bin/sqlite3").absolutePath)
     }
 
 

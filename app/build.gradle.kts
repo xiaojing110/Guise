@@ -126,6 +126,13 @@ dependencies {
     compileOnly("de.robv.android.xposed:api:82")
     implementation(project(":ktx-xposed"))
     implementation("com.tencent:mmkv:1.2.15")
+    // implementation("io.github.admin4j:http:0.4.0")
+
+    // Ktor
+    implementation("io.ktor:ktor-client-android:1.6.4")
+    implementation("io.ktor:ktor-client-serialization:1.6.4")
+    implementation("io.ktor:ktor-client-okhttp:1.6.4")
+
 
     // Kotlin-serilization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")

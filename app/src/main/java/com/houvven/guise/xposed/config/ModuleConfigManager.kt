@@ -6,8 +6,12 @@ import android.provider.Settings
 import androidx.compose.runtime.MutableState
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import com.houvven.guise.BuildConfig
 import com.houvven.guise.ContextAmbient
 import com.houvven.guise.R
+import com.houvven.guise.constant.AppConfigKey
+import com.houvven.guise.lsposed.LsposedHelper
+import com.houvven.guise.module.ktx.runThread
 import com.houvven.guise.ui.routing.LauncherState
 import com.houvven.guise.xposed.PackageConfig
 import com.houvven.ktx_xposed.SafeSharePrefs
@@ -18,6 +22,11 @@ private constructor(
     val config: ModuleConfig,
     val state: ModuleConfigState,
 ) {
+
+    private val superLsposed get() = AppConfigKey.run { mmkv.decodeBool(SUPER_LSPOSED, false) }
+
+
+    private val modulePkgName = BuildConfig.APPLICATION_ID
 
     private val safePrefs
         get() = SafeSharePrefs.of(
@@ -36,8 +45,17 @@ private constructor(
         val json = config.toJson()
         val enable = config.isEnable
         LauncherState.apps.value.find { it.packageName == config.packageName }?.isEnable = enable
-        if (enable) safePrefs.edit { putString(config.packageName, json) }
-        else safePrefs.edit(commit = true) { remove(config.packageName) }
+        if (enable) {
+            safePrefs.edit { putString(config.packageName, json) }
+            if (superLsposed) runThread {
+                LsposedHelper.addScope(modulePkgName, config.packageName)
+            }
+        } else {
+            safePrefs.edit(commit = true) { remove(config.packageName) }
+            if (superLsposed) runThread {
+                LsposedHelper.removeScope(modulePkgName, config.packageName)
+            }
+        }
     }
 
     fun stopApp(): Boolean {

@@ -14,7 +14,6 @@ import com.houvven.ktx_xposed.SafeSharePrefs
 object AppInfoProvider {
 
     private val context = ContextAmbient.current
-
     private val packageManager get() = context.packageManager
     private val safeSharePrefs get() = SafeSharePrefs.of(context, PackageConfig.PREF_FILE_NAME)
 

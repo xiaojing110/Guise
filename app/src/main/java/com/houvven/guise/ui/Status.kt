@@ -24,3 +24,14 @@ val alwaysDarkMode by derivedStateOf {
         mmkv.decodeBool(ALWAYS_DARK_MODE, false)
     })
 }
+
+
+val superLsposed by derivedStateOf {
+    mutableStateOf(AppConfigKey.run {
+        mmkv.decodeBool(SUPER_LSPOSED, false)
+    })
+}
+
+val requestSuperLsposed by derivedStateOf {
+    mutableStateOf(false)
+}

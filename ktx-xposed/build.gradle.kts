@@ -37,7 +37,6 @@ android {
 dependencies {
     compileOnly("de.robv.android.xposed:api:82")
     implementation("androidx.core:core-ktx:1.9.0")
-    implementation("io.ktor:ktor-client-android:2.2.2")
     implementation(project(":lib"))
 
     val roomVersion = "2.5.0"

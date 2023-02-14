@@ -2,6 +2,7 @@ package com.houvven.guise.ui.routing.launcher
 
 import android.graphics.Bitmap
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.clipScrollableContainer
 import androidx.compose.foundation.gestures.Orientation
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,6 +29,7 @@ import androidx.compose.material.icons.filled.Link
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -40,6 +43,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
@@ -50,14 +54,20 @@ import com.houvven.guise.BuildConfig
 import com.houvven.guise.R
 import com.houvven.guise.constant.AppConfigKey
 import com.houvven.guise.constant.DonatePays
+import com.houvven.guise.lsposed.LsposedHelper
+import com.houvven.guise.module.ktx.runThread
 import com.houvven.guise.module.ktx.toBitmap
+import com.houvven.guise.ui.GlobalSnackbarHost
 import com.houvven.guise.ui.alwaysActivate
 import com.houvven.guise.ui.alwaysDarkMode
 import com.houvven.guise.ui.components.EmailHyperLink
 import com.houvven.guise.ui.components.Hyperlink
+import com.houvven.guise.ui.components.simplify.NoBtnAlertDialog
 import com.houvven.guise.ui.components.simplify.SimplifyIcon
 import com.houvven.guise.ui.components.simplify.SimplifyImage
 import com.houvven.guise.ui.isHooked
+import com.houvven.guise.ui.requestSuperLsposed
+import com.houvven.guise.ui.superLsposed
 import com.houvven.guise.ui.utils.hideLauncherIcon
 import com.houvven.guise.ui.utils.isHideLauncherIcon
 import kotlinx.coroutines.launch
@@ -145,6 +155,21 @@ internal fun SettingScreen() {
     val modalBottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
 
+
+    if (requestSuperLsposed.value) NoBtnAlertDialog(
+        onDismissRequest = { },
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        tonalElevation = 0.dp
+    ) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            CircularProgressIndicator(
+                color = MaterialTheme.colorScheme.primary,
+                strokeWidth = 5.dp,
+                modifier = Modifier.size(50.dp)
+            )
+        }
+    }
+
     @Composable
     fun content() {
 
@@ -170,6 +195,32 @@ internal fun SettingScreen() {
             onChange = {
                 alwaysActivate.value = it
                 AppConfigKey.run { mmkv.encode(ALWAYS_ACTIVE, it) }
+            }
+        )
+
+        ContainerSwitch(
+            label = "跟随Lsposed配置",
+            subLabel = "[实验性功能]${System.lineSeparator()}在本APP中对应用进行配置后, Lsposed管理器中也跟随启用目标应用，如果清空配置，则反之。 这仅适用于Lsposed。",
+            state = superLsposed,
+            onChange = {
+                runThread {
+                    var value = it
+                    if (value) {
+                        requestSuperLsposed.value = true
+                        if (!LsposedHelper.isOk()) {
+                            val downloadResult = LsposedHelper.download()
+                            if (!downloadResult.isSuccess) {
+                                GlobalSnackbarHost.showOnErrorByDismissPrevious(
+                                    downloadResult.exceptionOrNull().toString()
+                                )
+                                value = false
+                            }
+                        }
+                        requestSuperLsposed.value = false
+                    }
+                    AppConfigKey.run { mmkv.encode(SUPER_LSPOSED, value) }
+                    superLsposed.value = value
+                }
             }
         )
 

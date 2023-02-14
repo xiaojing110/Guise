@@ -1,12 +1,14 @@
 package com.houvven.guise.module
 
+import com.houvven.lib.command.ShellActuators
+
 object SystemProp {
 
     @JvmStatic
     val abi: String
         get() {
-            val abi = com.houvven.lib.command.ShellActuators.exec("getprop ro.product.cpu.abi", true)
-            return if (abi.isSuccess) abi.getOrNull() ?: "unknown" else "unknown"
+            val abi = ShellActuators.exec("getprop ro.product.cpu.abi", true)
+            return if (abi.isSuccess) abi.getOrNull()?.trim() ?: "unknown" else "unknown"
         }
 
 
