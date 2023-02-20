@@ -27,13 +27,6 @@ class LocationHook : LoadPackageHandler, LocationHookBase() {
     private var latitude = config.latitude
     private var longitude = config.longitude
 
-    init {
-        if (config.randomOffset) {
-            latitude += (Math.random() - 0.5) * 0.0001
-            longitude += (Math.random() - 0.5) * 0.0001
-        }
-    }
-
     private val svCount = 5
     private val svidWithFlags = intArrayOf(1, 2, 3, 4, 5)
     private val cn0s = floatArrayOf(0F, 0F, 0F, 0F, 0F)
@@ -44,9 +37,13 @@ class LocationHook : LoadPackageHandler, LocationHookBase() {
 
 
     override fun onHook() {
-
         if (longitude == -1.0 && latitude == -1.0) return
 
+        // LocationHook Enabled
+        if (config.randomOffset) {
+            latitude += (Math.random() - 0.5) * 0.0001
+            longitude += (Math.random() - 0.5) * 0.0001
+        }
         if (config.makeWifiLocationFail) makeWifiLocationFail()
         if (config.makeCellLocationFail) makeCellLocationFail()
 
