@@ -1,0 +1,48 @@
+[versions]
+accompanist-navigation-animation = "0.28.0"
+accompanist-permissions = "0.28.0"
+accompanist-placeholder = "0.28.0"
+accompanist-systemuicontroller = "0.28.0"
+accompanist-webview = "0.28.0"
+activity-compose = "1.6.1"
+kotlin-serialization = "1.7.20"
+kotlinx-coroutines-android = "1.6.4"
+kotlinx-coroutines-core = "1.6.4"
+kotlinx-serialization-json = "1.4.1"
+ktor-client-android = "2.2.2"
+ktor-client-okhttp = "1.6.4"
+lottie-compose = "6.0.0"
+xposed-api = "82"
+appcompat = "1.6.1"
+core-ktx = "1.9.0"
+gradle = "7.4.1"
+kotlin-gradle-plugin = "1.7.20"
+lifecycle-runtime-ktx = "2.5.1"
+compose-bom = "2023.01.00"
+
+
+[libraries]
+accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanist-navigation-animation" }
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist-permissions" }
+accompanist-placeholder = { module = "com.google.accompanist:accompanist-placeholder", version.ref = "accompanist-placeholder" }
+accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist-systemuicontroller" }
+accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist-webview" }
+activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
+kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin-serialization" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-android" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor-client-android" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor-client-okhttp" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie-compose" }
+xposed-api = { module = "de.robv.android.xposed:api", version.ref = "xposed-api" }
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin" }
+lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
+
+
+[plugins]
+
