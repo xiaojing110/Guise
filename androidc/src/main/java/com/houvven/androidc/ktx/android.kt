@@ -3,8 +3,10 @@
 
 package com.houvven.androidc.ktx
 
+import android.app.Activity
 import android.content.Context
 import android.widget.Toast
+import androidx.core.view.WindowCompat
 
 /**
  * 当前正在显示的Toast
@@ -43,4 +45,9 @@ fun Context.showToastIfDismissible(message: String, duration: Int = Toast.LENGTH
         currentToast.cancel()
     }
     showToast(message, duration)
+}
+
+
+fun Activity.transparentStatusBar() {
+    WindowCompat.setDecorFitsSystemWindows(window, false)
 }

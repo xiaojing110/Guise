@@ -18,10 +18,14 @@ android {
             enableV1Signing = true
             enableV2Signing = true
             enableV3Signing = true
-            runCatching { signatureInfo.storeFileFromPath }.onSuccess { storeFile = it }
+            storeFile = signatureInfo.storeFileFromPath
+            storePassword = signatureInfo.storePassword
+            keyAlias = signatureInfo.keyAlias
+            keyPassword = signatureInfo.keyPassword
+            /* runCatching { signatureInfo.storeFileFromPath }.onSuccess { storeFile = it }
             runCatching { signatureInfo.storePassword }.onSuccess { storePassword = it }
             runCatching { signatureInfo.keyAlias }.onSuccess { keyAlias = it }
-            runCatching { signatureInfo.keyPassword }.onSuccess { keyPassword = it }
+            runCatching { signatureInfo.keyPassword }.onSuccess { keyPassword = it } */
         }
     }
 
@@ -31,21 +35,23 @@ android {
         targetSdk = ASdk.target
         versionCode = version.versionCode
         versionName = version.versionName
-        signingConfig = signingConfigs.getByName("release")
         vectorDrawables {
             useSupportLibrary = true
         }
-        signingConfig = signingConfigs.getByName("release")
     }
 
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -75,6 +81,7 @@ dependencies {
     implementation(project(":androidc"))
     implementation(project(":ktxposed"))
     compileOnly(libs.xposed.api)
+    implementation(libs.appcompat)
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
@@ -86,7 +93,7 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.permissions)
     implementation(libs.accompanist.placeholder)
-    implementation (libs.lottie.compose)
+    implementation(libs.lottie.compose)
     implementation(platform(libs.compose.bom))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")

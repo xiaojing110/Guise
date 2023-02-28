@@ -23,12 +23,13 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
+    primary = Color(0xFF111113),
+    secondary = Color(0xFF272629),
+    tertiary = Color(0xFF4B4C4D),
 
     background = Color(0xFFEFF0F4),
-    surface = Color(0xFFFFFFFF)
+    surface = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFFE7E7E7)
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -49,10 +50,11 @@ fun GuiseTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
-        // dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-        //     val context = LocalContext.current
-        //     if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        // }
+        // TODO: 实现莫奈取色
+        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && false -> {
+            val context = LocalContext.current
+            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        }
 
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
