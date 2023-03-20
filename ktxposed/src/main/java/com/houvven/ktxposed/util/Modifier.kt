@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.houvven.ktxposed.util
 
 import java.lang.reflect.Constructor

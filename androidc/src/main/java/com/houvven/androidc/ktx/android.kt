@@ -7,6 +7,7 @@ import android.app.Activity
 import android.content.Context
 import android.widget.Toast
 import androidx.core.view.WindowCompat
+import java.util.Locale
 
 /**
  * 当前正在显示的Toast

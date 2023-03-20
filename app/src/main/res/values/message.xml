@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hooked">Activated</string>
+    <string name="not_hooked">Inactivated</string>
+    <string name="not_hooked_help">It is detected that the module is currently not activated, please activate the module before using it (you should read the usage help). If you are using a root-free framework, please try to enable related options in the settings page.</string>
+    <string name="config_no_configured_app">You haven\'t configured it yet, go configure it</string>
+</resources>

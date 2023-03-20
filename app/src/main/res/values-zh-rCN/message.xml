@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hooked">已激活</string>
+    <string name="not_hooked">未激活</string>
+    <string name="not_hooked_help">检测到模块未激活，请你先激活模块再进行使用（你应该阅读使用帮助）。如果你使用的是免Root框架请尝试在设置页中开启相关选项。</string>
+    <string name="config_no_configured_app">你还没有进行配置哦，快去配置吧</string>
+
+</resources>

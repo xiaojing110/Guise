@@ -1,37 +1,47 @@
 package com.houvven.ktxposed.log
 
 import android.util.Log
-import com.houvven.androidc.ktx.ifFalse
-import com.houvven.ktxposed.LocalHookParam
 
 @Suppress("unused")
 object XposedLogger {
+
+    var isDebug = true
 
     private val logs = mutableListOf<String>()
 
     private const val TAG = "XposedLogger"
 
-    fun d(tag: String, message: String) {
-        Log.d(tag, message)
-        // Log.e("tag", RuntimeException(""))
+    fun load() {
+        TODO()
     }
 
+    fun i(message: String) {
+        log(message)
+    }
+
+    fun d(message: String) {
+        if (!isDebug) return
+        Log.d(TAG, message)
+    }
+
+    fun w(message: String) {
+        Log.w(TAG, message)
+        log(message)
+    }
+
+    fun e(string: String) {
+        Log.e(TAG, string)
+        log(string)
+    }
 
     fun e(throwable: Throwable) {
         val stackTrace = throwable.stackTraceToString()
         Log.e(TAG, stackTrace)
+        log(stackTrace)
     }
 
-    private fun log() {
-        runCatching {
-            LocalHookParam.lpparam
-
-        }.onFailure {
-            val resolve = LocalHookParam.context.dataDir.resolve("guise.log")
-            resolve.exists() ifFalse { resolve.createNewFile() }
-            resolve.appendText(logs.joinToString("\n"))
-        }.onFailure {
-
-        }
+    private fun log(message: String) {
+        logs.add(message)
+        
     }
 }

@@ -10,6 +10,7 @@ dependencies {
     implementation(libs.kotlin.serialization)
 }
 
+
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_17.majorVersion

@@ -12,15 +12,17 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven("https://mirrors.tencent.com/nexus/repository/maven-public/")
         maven("https://api.xposed.info")
-        maven ("https://oss.sonatype.org/content/repositories/snapshots/")
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
 }
 
-rootProject.name = "Guise"
+rootProject.name = "Twig"
 
 include(
     ":app",
     ":androidc",
     ":ktxposed"
 )
+include(":abcl")

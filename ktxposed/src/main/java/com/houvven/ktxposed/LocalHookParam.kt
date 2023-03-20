@@ -1,11 +1,12 @@
 package com.houvven.ktxposed
 
+import android.annotation.SuppressLint
 import android.app.AndroidAppHelper
 import android.content.Context
-import de.robv.android.xposed.callbacks.XC_InitPackageResources
+import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.callbacks.XC_LoadPackage
 
-
+@Suppress("unused")
 object LocalHookParam {
     /**
      * @see XC_LoadPackage.LoadPackageParam
@@ -14,14 +15,11 @@ object LocalHookParam {
         internal set
 
     /**
-     * @see XC_InitPackageResources.InitPackageResourcesParam
-     */
-    lateinit var resparam: XC_InitPackageResources.InitPackageResourcesParam
-        internal set
-
-    /**
      * @see Context
      * @see AndroidAppHelper.currentApplication
      */
-    val context: Context by lazy { AndroidAppHelper.currentApplication() }
+    @get:SuppressLint("StaticFieldLeak")
+    val context: Context by lazy { AndroidAppHelper.currentApplication().applicationContext }
+
+    val BOOT_CLASS_LOADER: ClassLoader get() = XposedBridge.BOOTCLASSLOADER
 }
