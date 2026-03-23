@@ -21,7 +21,7 @@ object DSD {
             Icon(
                 imageVector = Icons.Outlined.DeleteSweep,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
             )
         }
     }
@@ -35,7 +35,7 @@ object DSD {
             Icon(
                 imageVector = Icons.Outlined.SaveAs,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
             )
         }
     }

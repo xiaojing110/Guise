@@ -1,0 +1,157 @@
+# ============================================================
+# Guise 自动编译工作流
+# ============================================================
+# 功能:
+#   - 每次 push/PR 自动编译 Debug APK
+#   - 打 tag 时自动编译 Release APK 并创建 GitHub Release
+#   - 支持签名配置（通过 GitHub Secrets）
+#
+# 使用方法:
+#   1. 将仓库推送到 GitHub
+#   2. (可选) 在 Settings → Secrets 中配置签名密钥
+#   3. 推送代码即自动触发编译
+#   4. 打 tag (如 v1.2.0) 触发正式发布
+# ============================================================
+
+name: 🔨 编译 Guise
+
+on:
+  push:
+    branches: [ master, main ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ master, main ]
+
+# 同一分支/PR 只保留最新一次编译，取消之前的
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: 📦 编译 APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      # ============================================================
+      # 1. 检出代码
+      # ============================================================
+      - name: 📥 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ============================================================
+      # 2. 配置 JDK 17
+      # ============================================================
+      - name: ☕ 配置 JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # ============================================================
+      # 3. Gradle 缓存（加速后续编译）
+      # ============================================================
+      - name: 💾 Gradle 缓存
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      # ============================================================
+      # 4. 配置签名信息（从 GitHub Secrets）
+      #    如果未配置 Secrets，将编译 debug 版本（使用默认 debug 签名）
+      # ============================================================
+      - name: 🔐 配置签名信息
+        env:
+          SIGNATURE_STORE_FILE_BASE64: ${{ secrets.SIGNATURE_STORE_FILE_BASE64 }}
+          SIGNATURE_STORE_PASSWORD: ${{ secrets.SIGNATURE_STORE_PASSWORD }}
+          SIGNATURE_STORE_TYPE: ${{ secrets.SIGNATURE_STORE_TYPE }}
+          SIGNATURE_KEY_ALIAS: ${{ secrets.SIGNATURE_KEY_ALIAS }}
+          SIGNATURE_KEY_PASSWORD: ${{ secrets.SIGNATURE_KEY_PASSWORD }}
+        run: |
+          # 创建 local.properties（即使没有签名信息也会创建空文件）
+          touch local.properties
+          if [ -n "$SIGNATURE_STORE_FILE_BASE64" ]; then
+            echo "✅ 检测到签名配置，将编译正式签名版本"
+            echo "signature.store.file.base64=${SIGNATURE_STORE_FILE_BASE64}" >> local.properties
+            echo "signature.store.password=${SIGNATURE_STORE_PASSWORD}" >> local.properties
+            echo "signature.store.type=${SIGNATURE_STORE_TYPE:-jks}" >> local.properties
+            echo "signature.key.alias=${SIGNATURE_KEY_ALIAS}" >> local.properties
+            echo "signature.key.password=${SIGNATURE_KEY_PASSWORD}" >> local.properties
+          else
+            echo "⚠️ 未检测到签名配置，将编译 debug 版本"
+            echo "# 请在 GitHub Secrets 中配置以下变量以启用正式签名:" >> local.properties
+            echo "# SIGNATURE_STORE_FILE_BASE64, SIGNATURE_STORE_PASSWORD," >> local.properties
+            echo "# SIGNATURE_STORE_TYPE, SIGNATURE_KEY_ALIAS, SIGNATURE_KEY_PASSWORD" >> local.properties
+          fi
+
+      # ============================================================
+      # 5. 赋予 Gradle 执行权限并编译
+      # ============================================================
+      - name: 🔨 编译 APK
+        env:
+          GRADLE_OPTS: -Dorg.gradle.daemon=false -Dorg.gradle.jvmargs="-Xmx2048m"
+        run: |
+          chmod +x gradlew
+          if [ -n "${{ secrets.SIGNATURE_STORE_FILE_BASE64 }}" ]; then
+            echo "编译 Release 版本..."
+            ./gradlew assembleRelease --no-daemon --stacktrace
+          else
+            echo "编译 Debug 版本..."
+            ./gradlew assembleDebug --no-daemon --stacktrace
+          fi
+
+      # ============================================================
+      # 6. 上传编译产物
+      # ============================================================
+      - name: ⬆️ 上传 APK (Debug)
+        if: github.event_name == 'pull_request' || (github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/'))
+        uses: actions/upload-artifact@v4
+        with:
+          name: Guise-Debug-${{ github.sha }}
+          path: |
+            app/build/outputs/apk/debug/*.apk
+          retention-days: 30
+
+      - name: ⬆️ 上传 APK (Release)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/upload-artifact@v4
+        with:
+          name: Guise-Release-${{ github.ref_name }}
+          path: |
+            app/build/outputs/apk/release/*.apk
+          retention-days: 90
+
+      # ============================================================
+      # 7. 打 Tag 时自动创建 GitHub Release
+      # ============================================================
+      - name: 🏷️ 创建 GitHub Release
+        if: startsWith(github.ref, 'refs/tags/') && success()
+        uses: softprops/action-gh-release@v2
+        with:
+          files: app/build/outputs/apk/release/*.apk
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ============================================================
+      # 8. 编译失败时上传日志
+      # ============================================================
+      - name: 📋 上传编译日志（失败时）
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs-${{ github.sha }}
+          path: |
+            app/build/outputs/
+            **/build/reports/
+          retention-days: 7

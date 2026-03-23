@@ -7,7 +7,7 @@ import java.io.Closeable
 
 class DeviceDBHelper(context: Context) : Closeable {
 
-    private val version = 2
+    private val version = 3
     private val deviceDBFileName = "devices.db"
     private val deviceDBFile = context.getDatabasePath(deviceDBFileName)
 

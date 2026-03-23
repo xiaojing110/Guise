@@ -6,13 +6,30 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Android
+import androidx.compose.material.icons.outlined.Apps
+import androidx.compose.material.icons.outlined.BatteryFull
+import androidx.compose.material.icons.outlined.Fingerprint
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Memory
+import androidx.compose.material.icons.outlined.NetworkCheck
+import androidx.compose.material.icons.outlined.PhoneAndroid
+import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Shield
+import androidx.compose.material.icons.outlined.SimCard
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.ElevatedSuggestionChip
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
@@ -28,9 +45,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.houvven.androidc.information.DisplayInfoProvider
 import com.houvven.androidc.utils.SystemProperties
 import com.houvven.twig.R
@@ -123,21 +143,40 @@ fun DeployScreen(
 
 
 @Composable
-private fun ItemContainer(title: @Composable () -> String, content: @Composable () -> Unit) {
+private fun SectionHeader(icon: ImageVector, title: String) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(start = 16.dp, top = 18.dp, bottom = 8.dp)
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.size(22.dp)
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp
+            ),
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Composable
+private fun ItemContainer(icon: ImageVector, title: @Composable () -> String, content: @Composable () -> Unit) {
     val shape = MaterialTheme.shapes.medium
     Column(
         modifier = Modifier
-            .padding(horizontal = 5.dp, vertical = 10.dp)
+            .padding(horizontal = 8.dp, vertical = 6.dp)
             .fillMaxWidth()
             .clip(shape = shape),
     ) {
-        Text(
-            text = title(),
-            modifier = Modifier.padding(start = 20.dp, top = 15.dp),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary
-        )
-        Column(modifier = Modifier.padding(horizontal = 10.dp, vertical = 10.dp)) {
+        SectionHeader(icon = icon, title = title())
+        Column(modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)) {
             content()
         }
     }
@@ -167,7 +206,7 @@ private fun ConfigurationItem(launch: () -> Unit) = LocalConfigState.currentStat
     val context = LocalContext.current
     val displayInfo = DisplayInfoProvider.of(context)
 
-    ItemContainer({ stringResource(id = R.string.deploy_title_device_info) }) {
+    ItemContainer(icon = Icons.Outlined.PhoneAndroid, title = { stringResource(id = R.string.deploy_title_device_info) }) {
         PresetInput(
             state = MANUFACTURER,
             label = { stringResource(id = R.string.deploy_device_info_manufacturer) },
@@ -201,7 +240,7 @@ private fun ConfigurationItem(launch: () -> Unit) = LocalConfigState.currentStat
             placeholder = { Build.getRadioVersion() }
         )
     }
-    ItemContainer({ stringResource(id = R.string.deploy_title_system_info) }) {
+    ItemContainer(icon = Icons.Outlined.Android, title = { stringResource(id = R.string.deploy_title_system_info) }) {
         PresetInput(
             state = RELEASE,
             label = { stringResource(id = R.string.deploy_system_info_release) },
@@ -233,7 +272,7 @@ private fun ConfigurationItem(launch: () -> Unit) = LocalConfigState.currentStat
             preset = Presets.USB_DEBUGGING
         )
     }
-    ItemContainer(title = { stringResource(id = R.string.deploy_title_hardware_info) }) {
+    ItemContainer(icon = Icons.Outlined.Memory, title = { stringResource(id = R.string.deploy_title_hardware_info) }) {
         Input(
             state = GPU_VENDOR,
             label = { stringResource(id = R.string.deploy_hardware_info_gpu_vendor) },
@@ -271,7 +310,7 @@ private fun ConfigurationItem(launch: () -> Unit) = LocalConfigState.currentStat
             placeholder = { context.resources.configuration.fontScale.toString() }
         )
     }
-    ItemContainer(title = { stringResource(id = R.string.deploy_title_network_info) }) {
+    ItemContainer(icon = Icons.Outlined.NetworkCheck, title = { stringResource(id = R.string.deploy_title_network_info) }) {
         DropMenuInput(
             state = NETWORK_TYPE,
             label = { stringResource(id = R.string.deploy_network_info_network_type) },
@@ -298,7 +337,7 @@ private fun ConfigurationItem(launch: () -> Unit) = LocalConfigState.currentStat
             state = BLUETOOTH_MAC,
             label = { stringResource(id = R.string.deploy_network_info_bluetooth_mac) })
     }
-    ItemContainer(title = { stringResource(id = R.string.deploy_title_sim_info) }) {
+    ItemContainer(icon = Icons.Outlined.SimCard, title = { stringResource(id = R.string.deploy_title_sim_info) }) {
         PresetInput(
             state = SIM_OPERATOR,
             label = { stringResource(id = R.string.sim_info_operator) },
@@ -319,7 +358,7 @@ private fun ConfigurationItem(launch: () -> Unit) = LocalConfigState.currentStat
         Input(state = LAC, label = { "Lac" })
         Input(state = CID, label = { "Cid" })
     }
-    ItemContainer(title = { stringResource(id = R.string.deploy_title_location_info) }) {
+    ItemContainer(icon = Icons.Outlined.LocationOn, title = { stringResource(id = R.string.deploy_title_location_info) }) {
         OperateInputBox(
             state = LONGITUDE,
             label = { stringResource(id = R.string.deploy_location_info_longitude) },
@@ -349,26 +388,29 @@ private fun ConfigurationItem(launch: () -> Unit) = LocalConfigState.currentStat
             label = { stringResource(id = R.string.deploy_location_info_disable_tel_location) }
         )
     }
-    ItemContainer(title = { stringResource(id = R.string.deploy_title_app_info) }) {
+    ItemContainer(icon = Icons.Outlined.Apps, title = { stringResource(id = R.string.deploy_title_app_info) }) {
         Input(state = APP_VERSION_NAME, label = { stringResource(id = R.string.deploy_app_version_name) })
         Input(state = APP_VERSION_CODE, label = { stringResource(id = R.string.deploy_app_version_code) })
     }
-    ItemContainer(title = { stringResource(id = R.string.deploy_title_identifies) }) {
+    ItemContainer(icon = Icons.Outlined.Fingerprint, title = { stringResource(id = R.string.deploy_title_identifies) }) {
         Input(state = IMEI, label = { "IMEI" })
         Input(state = DEVICE_ID, label = { stringResource(id = R.string.deploy_device_id) })
         Input(state = PHONE_NUMBER, label = { stringResource(id = R.string.deploy_phone_number) })
     }
-    ItemContainer(title = { stringResource(id = R.string.deploy_title_other) }) {
+    ItemContainer(icon = Icons.Outlined.BatteryFull, title = { stringResource(id = R.string.deploy_title_other) }) {
         Input(state = BATTERY_LEVEL, label = { stringResource(id = R.string.deploy_other_battery_level) })
         DropMenuInput(state = SCREENSHOTS, label = { stringResource(id = R.string.deploy_other_screenshots) }, preset = Presets.SCREENSHOTS)
     }
-    ItemContainer(title = { stringResource(id = R.string.deploy_title_blank_pass) }) {
+    ItemContainer(icon = Icons.Outlined.VisibilityOff, title = { stringResource(id = R.string.deploy_title_blank_pass) }) {
         SwitchInput(state = BLANK_PASS_PHOTO, label = { stringResource(id = R.string.deploy_blank_pass_photo) })
         SwitchInput(state = BLANK_PASS_VIDEO, label = { stringResource(id = R.string.deploy_blank_pass_video) })
         SwitchInput(state = BLANK_PASS_AUDIO, label = { stringResource(id = R.string.deploy_blank_pass_audio) })
         SwitchInput(state = BLANK_PASS_CONTACTS, label = { stringResource(id = R.string.deploy_blank_pass_contacts) })
     }
-    ItemContainer(title = { stringResource(id = R.string.deploy_title_disable_sensor) }) {
+    ItemContainer(icon = Icons.Outlined.Shield, title = { stringResource(id = R.string.deploy_title_anti_detection) }) {
+        SwitchInput(state = ANTI_DETECTION, label = { stringResource(id = R.string.deploy_anti_detection_enable) })
+    }
+    ItemContainer(icon = Icons.Outlined.Settings, title = { stringResource(id = R.string.deploy_title_disable_sensor) }) {
 
     }
 }

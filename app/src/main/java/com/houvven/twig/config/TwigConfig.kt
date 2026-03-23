@@ -98,6 +98,9 @@ sealed interface TwigConfig {
     val BLANK_PASS_AUDIO: Any
     val BLANK_PASS_CONTACTS: Any
 
+    // 反检测
+    val ANTI_DETECTION: Any
+
     @Serializable
     data class Config(
         @Transient
@@ -155,6 +158,7 @@ sealed interface TwigConfig {
         override val BLANK_PASS_VIDEO: Boolean = false,
         override val BLANK_PASS_AUDIO: Boolean = false,
         override val BLANK_PASS_CONTACTS: Boolean = false,
+        override val ANTI_DETECTION: Boolean = false,
     ) : TwigConfig {
         @Transient
         val isEnable: Boolean get() = this != default.copy(packageName = packageName)
@@ -221,6 +225,7 @@ sealed interface TwigConfig {
         override lateinit var BLANK_PASS_VIDEO: MutableState<Boolean>
         override lateinit var BLANK_PASS_AUDIO: MutableState<Boolean>
         override lateinit var BLANK_PASS_CONTACTS: MutableState<Boolean>
+        override lateinit var ANTI_DETECTION: MutableState<Boolean>
 
 
         init {

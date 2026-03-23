@@ -14,7 +14,6 @@ import androidx.compose.material.icons.outlined.Assignment
 import androidx.compose.material.icons.outlined.Poll
 import androidx.compose.material.icons.outlined.Science
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -35,10 +34,11 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.houvven.twig.R
-import com.houvven.twig.ui.route.deploy.DeployScreen
 import com.houvven.twig.ui.route.launcher.ConfiguredLauncher
 import com.houvven.twig.ui.route.launcher.LogLauncher
 import com.houvven.twig.ui.route.launcher.settings.SettingsLauncher
@@ -83,7 +83,7 @@ fun setCurrentLauncherScreenType(type: LauncherScreenTypes) {
 fun LauncherScreen() {
 
     val systemUiController = rememberSystemUiController()
-    val bottomNavBackground = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.05F)
+    val bottomNavBackground = MaterialTheme.colorScheme.surface
 
     SideEffect {
         systemUiController.setNavigationBarColor(
@@ -99,15 +99,16 @@ fun LauncherScreen() {
         unselectedIcon: ImageVector,
         label: String,
     ) {
-        val selectedColor = MaterialTheme.colorScheme.primary
-        val unselectedColor = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.6F)
         val selected = currentPage.value == type
+
+        val selectedColor = MaterialTheme.colorScheme.primary
+        val unselectedColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6F)
 
         val (icon, color) =
             (if (selected) arrayOf(selectedIcon, selectedColor)
             else arrayOf(unselectedIcon, unselectedColor))
 
-        val scale = if (selected) 1.1F else 1F
+        val scale = if (selected) 1.05F else 1F
         NavigationBarItem(
             selected = selected,
             onClick = { currentPage.value = type },
@@ -119,22 +120,29 @@ fun LauncherScreen() {
                     modifier = Modifier.scale(scale)
                 )
             },
-            label = { Text(text = label, modifier = Modifier.scale(scale)) },
+            label = {
+                Text(
+                    text = label,
+                    modifier = Modifier.scale(scale),
+                    fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+                    fontSize = 12.sp
+                )
+            },
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = selectedColor,
                 selectedTextColor = selectedColor,
                 unselectedIconColor = unselectedColor,
-                unselectedTextColor = unselectedColor
+                unselectedTextColor = unselectedColor,
+                indicatorColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f)
             )
         )
     }
 
     Scaffold(
         bottomBar = {
-            Divider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f))
             NavigationBar(
                 containerColor = bottomNavBackground,
-                tonalElevation = 0.dp
+                tonalElevation = 8.dp
             ) {
                 LauncherScreenTypes.values().forEach { screenType ->
                     NavItem(

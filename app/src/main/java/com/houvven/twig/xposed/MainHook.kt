@@ -9,6 +9,7 @@ import com.houvven.twig.xposed.hook.NetworkInfoHook
 import com.houvven.twig.xposed.hook.OtherHooks
 import com.houvven.twig.xposed.hook.PrivacyRelated
 import com.houvven.twig.xposed.hook.SimInfoHook
+import com.houvven.twig.xposed.hook.AntiDetectionHook
 import com.houvven.twig.xposed.hook.basic.DeviceInfoHook
 import com.houvven.twig.xposed.hook.basic.HardwareInfoHook
 import com.houvven.twig.xposed.hook.basic.SystemInfoHook
@@ -37,7 +38,8 @@ class MainHook : HookLoadPackageEntrance {
                 AppInfoHook,
                 IdentifiersHook(),
                 OtherHooks(),
-                PrivacyRelated()
+                PrivacyRelated(),
+                AntiDetectionHook()
             )
         )
     }

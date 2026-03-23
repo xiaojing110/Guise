@@ -49,5 +49,7 @@
     <string name="deploy_blank_pass_video">Video</string>
     <string name="deploy_blank_pass_audio">Audio</string>
     <string name="deploy_blank_pass_contacts">Contacts</string>
+    <string name="deploy_title_anti_detection">Anti-Detection</string>
+    <string name="deploy_anti_detection_enable">Stealth Mode (Hide Xposed/Root/Magisk)</string>
     <string name="deploy_title_disable_sensor">Disable Sensor</string>
 </resources>

@@ -49,5 +49,7 @@
     <string name="deploy_blank_pass_video">视频</string>
     <string name="deploy_blank_pass_audio">音频</string>
     <string name="deploy_blank_pass_contacts">联系人</string>
+    <string name="deploy_title_anti_detection">反检测</string>
+    <string name="deploy_anti_detection_enable">隐身模式（隐藏Xposed/Root/Magisk痕迹）</string>
     <string name="deploy_title_disable_sensor">禁用传感器</string>
 </resources>

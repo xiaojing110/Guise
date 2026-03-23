@@ -35,7 +35,10 @@ internal enum class ReleasePreset(override val label: String, override val value
     ANDROID_10_0("Android 10", "10"),
     ANDROID_11_0("Android 11", "11"),
     ANDROID_12_0("Android 12", "12"),
-    ANDROID_13_0("Android 13", "13")
+    ANDROID_13_0("Android 13", "13"),
+    ANDROID_14_0("Android 14", "14"),
+    ANDROID_15_0("Android 15", "15"),
+    ANDROID_16_0("Android 16", "16")
 
     ;
 }

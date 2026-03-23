@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
@@ -47,12 +48,12 @@ import kotlin.concurrent.thread
 
 @Composable
 private fun Button(icon: ImageVector, clickable: () -> Unit) {
-    IconButton(onClick = clickable, modifier = Modifier.requiredSize(24.dp)) {
+    IconButton(onClick = clickable, modifier = Modifier.requiredSize(28.dp)) {
         Icon(
             icon,
             contentDescription = null,
             Modifier.padding(2.dp),
-            tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.95F)
+            tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.85F)
         )
     }
 }
@@ -66,10 +67,12 @@ private fun BasicInput(
     label: @Composable () -> String,
     placeholder: (() -> String)? = null,
     colors: TextFieldColors = TextFieldDefaults.outlinedTextFieldColors(
-        unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.8f),
-        focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f),
+        unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.6f),
+        focusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
+        focusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f),
+        unfocusedPlaceholderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.35f),
+        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.65f),
+        focusedLabelColor = MaterialTheme.colorScheme.primary,
     ),
     trailingIcon: @Composable () -> Unit = {},
 ) {
@@ -205,7 +208,7 @@ internal fun SwitchInput(state: MutableState<Boolean>, label: @Composable () -> 
             .padding(top = 7.dp)
             .clip(MaterialTheme.shapes.medium)
             .clickable { state.value = !state.value },
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = .8f)),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = .6f)),
         shape = MaterialTheme.shapes.medium
     ) {
         Row(
@@ -223,7 +226,13 @@ internal fun SwitchInput(state: MutableState<Boolean>, label: @Composable () -> 
                 checked = state.value,
                 onCheckedChange = { state.value = it },
                 modifier = Modifier.padding(end = 8.dp),
-                enabled = LocalAppState.isHooked
+                enabled = LocalAppState.isHooked,
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = MaterialTheme.colorScheme.primary,
+                    checkedTrackColor = MaterialTheme.colorScheme.primaryContainer,
+                    uncheckedThumbColor = MaterialTheme.colorScheme.outline,
+                    uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
+                )
             )
         }
     }

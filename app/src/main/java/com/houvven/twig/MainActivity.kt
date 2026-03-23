@@ -10,6 +10,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
@@ -17,6 +18,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.houvven.androidc.utils.LocaleUtils
 import com.houvven.twig.ui.GlobalSnackbarHost
 import com.houvven.twig.ui.LocalAppState
@@ -64,13 +66,17 @@ fun App() {
                     modifier = Modifier.systemBarsPadding(),
                 ) { data ->
                     val containerStateColor =
-                        if (GlobalSnackbarHost.onError.value) MaterialTheme.colorScheme.error
-                        else MaterialTheme.colorScheme.primary
+                        if (GlobalSnackbarHost.onError.value) MaterialTheme.colorScheme.errorContainer
+                        else MaterialTheme.colorScheme.primaryContainer
+                    val contentColor =
+                        if (GlobalSnackbarHost.onError.value) MaterialTheme.colorScheme.onErrorContainer
+                        else MaterialTheme.colorScheme.onPrimaryContainer
                     Snackbar(
                         modifier = Modifier.systemBarsPadding(),
                         snackbarData = data,
                         containerColor = containerStateColor,
-                        shape = MaterialTheme.shapes.medium,
+                        contentColor = contentColor,
+                        shape = RoundedCornerShape(12.dp),
                     )
                 }
             }

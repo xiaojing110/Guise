@@ -14,15 +14,27 @@ android {
     compileSdk = ASdk.compile
 
     signingConfigs {
-        val signatureInfo = SignatureInfo(rootProject.file("local.properties"))
-        create("release") {
-            enableV1Signing = true
-            enableV2Signing = true
-            enableV3Signing = true
-            storeFile = signatureInfo.storeFileFromPath
-            storePassword = signatureInfo.storePassword
-            keyAlias = signatureInfo.keyAlias
-            keyPassword = signatureInfo.keyPassword
+        getByName("debug") {
+            // 默认 debug 签名（由 Android SDK 自动生成）
+        }
+        // 尝试加载正式签名配置（支持 local.properties 和环境变量）
+        try {
+            val signatureInfo = SignatureInfo(rootProject.file("local.properties"))
+            create("release") {
+                enableV1Signing = true
+                enableV2Signing = true
+                enableV3Signing = true
+                storeFile = try {
+                    signatureInfo.storeFileFromPath
+                } catch (e: RuntimeException) {
+                    signatureInfo.storeFileFromBase64
+                }
+                storePassword = signatureInfo.storePassword
+                keyAlias = signatureInfo.keyAlias
+                keyPassword = signatureInfo.keyPassword
+            }
+        } catch (e: RuntimeException) {
+            logger.lifecycle("⚠️ 签名配置未找到，将使用 debug 签名。如需正式签名，请配置 local.properties 或 GitHub Secrets。")
         }
     }
 
@@ -38,11 +50,18 @@ android {
         buildConfigField("long", "BUILD_TIME", "${System.currentTimeMillis()}")
     }
 
+    // 签名配置是否可用
+    val hasReleaseSigning = signingConfigs.findByName("release") != null
+
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = if (hasReleaseSigning) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
             setProguardFiles(
                 listOf(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -51,7 +70,11 @@ android {
             )
         }
         debug {
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = if (hasReleaseSigning) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
     compileOptions {
