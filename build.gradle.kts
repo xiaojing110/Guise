@@ -7,6 +7,11 @@ plugins {
 }
 
 buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
     dependencies {
         classpath(libs.kotlin.serialization)
         classpath(libs.kotlin.gradle.plugin)
