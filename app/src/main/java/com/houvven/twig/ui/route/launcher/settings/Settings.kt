@@ -174,11 +174,6 @@ fun SettingsLauncher() {
                 onClick = { uriHandler.openUri("https://github.com/xiaojing110/Guise/issues") }
             )
             NavItemContainer(
-                icon = Icons.Outlined.Paid,
-                text = { stringResource(id = R.string.setting_reward) },
-                onClick = { antiShakeNavOption(Routes.REWARD.name) }
-            )
-            NavItemContainer(
                 icon = Icons.Outlined.WorkspacePremium,
                 text = { stringResource(id = R.string.setting_license) },
                 onClick = { antiShakeNavOption(Routes.LICENSE.name) }

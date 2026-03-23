@@ -97,7 +97,7 @@ fun About() {
                         .width(50.dp)
                 )
                 SmallTitle { stringResource(id = R.string.about_author) }
-                TextContent { "Houvven" }
+                TextContent { "That Dream" }
                 SmallTitle { stringResource(id = R.string.about_version) }
                 TextContent { "${BuildConfig.VERSION_NAME}(${BuildConfig.VERSION_CODE})" }
                 SmallTitle { stringResource(id = R.string.build_time) }
