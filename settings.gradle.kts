@@ -18,7 +18,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Twig"
+rootProject.name = "Guise"
 
 include(
     ":app",

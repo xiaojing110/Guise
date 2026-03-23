@@ -105,7 +105,7 @@ fun About() {
                 val date = dateFormat.format(BuildConfig.BUILD_TIME)
                 TextContent { date }
                 SmallTitle { stringResource(id = R.string.about_open_source) }
-                UrlContent { "https://github.com/Houvven/Twig" }
+                UrlContent { "https://github.com/xiaojing110/Guise" }
                 Spacer(modifier = Modifier.padding(top = 20.dp))
                 TextContent(fontFamily = FontFamily.Cursive) {
                     "Send a warm message (what you want and need) to your Android device, like a twig it has vitality."

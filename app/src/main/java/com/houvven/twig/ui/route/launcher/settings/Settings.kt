@@ -171,7 +171,7 @@ fun SettingsLauncher() {
             NavItemContainer(
                 icon = Icons.Outlined.Feedback,
                 text = { stringResource(id = R.string.setting_feedback) },
-                onClick = { uriHandler.openUri("https://github.com/Houvven/Twig/issues") }
+                onClick = { uriHandler.openUri("https://github.com/xiaojing110/Guise/issues") }
             )
             NavItemContainer(
                 icon = Icons.Outlined.Paid,

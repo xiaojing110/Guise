@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Twig</string>
+    <string name="app_name" translatable="false">Guise</string>
     <string name="launcher_page_configuration">Config</string>
     <string name="launcher_page_template">Template</string>
     <string name="launcher_page_log">Log</string>

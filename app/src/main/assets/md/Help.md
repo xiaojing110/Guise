@@ -1,5 +1,5 @@
 ### 使用帮助
-**Twig是一个Xposed模块，如果你想要使用Twig，你需要先了解什么是[Xposed框架](https://baike.baidu.com/item/Xposed%E6%A1%86%E6%9E%B6/16859077)。**
+**Guise是一个Xposed模块，如果你想要使用Guise，你需要先了解什么是[Xposed框架](https://baike.baidu.com/item/Xposed%E6%A1%86%E6%9E%B6/16859077)。**
 <p></p>
 
 ### Lsposed作用域
