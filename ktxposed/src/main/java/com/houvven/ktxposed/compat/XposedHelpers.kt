@@ -314,9 +314,8 @@ object XposedHelpers {
 
     private fun invoke(method: Method, receiver: Any?, args: Array<out Any?>): Any? {
         method.isAccessible = true
-        val invokeArgs = args.toTypedArray()
         return try {
-            method.invoke(receiver, *invokeArgs)
+            method.invoke(receiver, *args)
         } catch (e: InvocationTargetException) {
             throw e.cause ?: e
         }
@@ -338,15 +337,15 @@ object XposedHelpers {
         classesOf(clazz).flatMap { it.declaredMethods.asSequence() }
 
     private fun isAssignable(parameterType: Class<*>, argumentType: Class<*>): Boolean {
-        val boxed = when (parameterType) {
-            java.lang.Boolean.TYPE -> java.lang.Boolean::class.java
-            java.lang.Byte.TYPE -> java.lang.Byte::class.java
-            java.lang.Character.TYPE -> java.lang.Character::class.java
-            java.lang.Short.TYPE -> java.lang.Short::class.java
-            java.lang.Integer.TYPE -> java.lang.Integer::class.java
-            java.lang.Long.TYPE -> java.lang.Long::class.java
-            java.lang.Float.TYPE -> java.lang.Float::class.java
-            java.lang.Double.TYPE -> java.lang.Double::class.java
+        val boxed = when (parameterType.name) {
+            "boolean" -> java.lang.Boolean::class.java
+            "byte" -> java.lang.Byte::class.java
+            "char" -> java.lang.Character::class.java
+            "short" -> java.lang.Short::class.java
+            "int" -> java.lang.Integer::class.java
+            "long" -> java.lang.Long::class.java
+            "float" -> java.lang.Float::class.java
+            "double" -> java.lang.Double::class.java
             else -> parameterType
         }
         return boxed.isAssignableFrom(argumentType)

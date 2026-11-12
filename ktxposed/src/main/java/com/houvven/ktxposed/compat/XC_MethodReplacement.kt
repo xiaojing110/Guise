@@ -8,6 +8,6 @@ open class XC_MethodReplacement @JvmOverloads constructor(
 
     open fun replaceHookedMethod(param: MethodHookParam): Any? = null
 
-    override fun handle(chain: XposedInterface.Chain): Any? =
+    internal override fun handle(chain: XposedInterface.Chain): Any? =
         replaceHookedMethod(MethodHookParam(chain))
 }

@@ -51,12 +51,6 @@ open class XC_MethodHook @JvmOverloads constructor(
         var returnEarly: Boolean = false
         var throwable: Throwable? = null
 
-        fun setResult(result: Any?) {
-            this.result = result
-        }
-
-        fun getResult(): Any? = result
-
         fun hasThrowable(): Boolean = throwable != null
     }
 

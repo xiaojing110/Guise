@@ -34,7 +34,7 @@ class XSharedPreferences @JvmOverloads constructor(
         runCatching { prefs()?.getStringSet(key, defValues) }.getOrNull() ?: defValues
 
     fun contains(key: String): Boolean =
-        runCatching { prefs()?.contains(key) }.getOrDefault(false)
+        runCatching { prefs()?.contains(key) }.getOrNull() == true
 
     fun getAll(): Map<String, *> =
         runCatching { prefs()?.all }.getOrNull() ?: emptyMap<String, Any?>()
