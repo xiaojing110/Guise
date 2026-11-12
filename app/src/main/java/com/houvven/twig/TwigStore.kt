@@ -90,7 +90,7 @@ object TwigStore {
         private val sp by lazy {
             try {
                 ContextAmbient.current.getSharedPreferences(store_name, Context.MODE_WORLD_READABLE)
-            } catch (e: UninitializedPropertyAccessException) {
+            } catch (e: Exception) {
                 ContextAmbient.current.getSharedPreferences(store_name, Context.MODE_PRIVATE)
             }
         }
@@ -140,8 +140,8 @@ object TwigStore {
         }
 
         fun get(packageName: String): TwigConfig.Config {
-            val config = if (LocalAppState.noRootWork.value) getFromMedia(packageName)
-            else getFromSp(packageName)
+            val fromSp = if (LocalAppState.noRootWork.value) "" else getFromSp(packageName)
+            val config = fromSp.ifBlank { getFromMedia(packageName) }
             return try {
                 TwigConfig.Config.fromJSON(config).copy(packageName = packageName)
             } catch (e: Exception) {
@@ -176,6 +176,28 @@ object TwigStore {
             file.writeText(config.toJSON())
         }
 
+        /**
+         * 把已有 SP 配置同步一份到目标应用 media 目录，
+         * 供 API 102 无法读取 remote prefs 时回退。
+         */
+        fun syncToMedia() {
+            if (LocalAppState.noRootWork.value || LocalAppState.isGlobalPattern.value) return
+            runCatching {
+                sp.all.keys
+                    .filter { it != global_key }
+                    .forEach { packageName ->
+                        val json = sp.getString(packageName, "").orEmpty()
+                        if (json.isNotBlank()) {
+                            runCatching {
+                                val config = TwigConfig.Config.fromJSON(json)
+                                    .copy(packageName = packageName)
+                                if (config.isEnable) saveToMedia(packageName, config)
+                            }
+                        }
+                    }
+            }
+        }
+
         fun save(config: TwigConfig.Config) {
             val packageName = config.packageName
             if (config.isEnable && LocalAppState.isGlobalPattern.value.not())
@@ -185,12 +207,20 @@ object TwigStore {
             else
                 all.value = all.value.toMutableList().apply { remove(packageName) }
 
-            if (LocalAppState.isGlobalPattern.value && !LocalAppState.noRootWork.value)
-                saveToGlobal(config)
-            else if (LocalAppState.noRootWork.value)
-                saveToMedia(packageName, config)
-            else
-                saveToSp(packageName, config)
+            if (LocalAppState.isGlobalPattern.value) {
+                if (!LocalAppState.noRootWork.value) {
+                    saveToGlobal(config)
+                } else if (packageName.isNotBlank()) {
+                    runCatching { saveToMedia(packageName, config) }
+                }
+            } else {
+                // 同时写一份到目标应用自己的 Android/media 目录，
+                // API 102 的 remote prefs 不可用时 Hook 侧可回退读取。
+                runCatching { saveToMedia(packageName, config) }
+                if (!LocalAppState.noRootWork.value) {
+                    saveToSp(packageName, config)
+                }
+            }
         }
 
         /* fun setState(packageName: String, state: Boolean) {

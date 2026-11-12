@@ -5,6 +5,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.houvven.androidc.application.DeviceAppProvider
 import com.houvven.androidc.ktx.ifFalse
 import com.houvven.ktxposed.HookStatus
@@ -122,7 +123,11 @@ internal object LocalAppState {
     /**
      * Xposed 是否已经挂载
      */
-    val isHooked by mutableStateOf(HookStatus.isHooked || noRootWork.value)
+    var isHooked by mutableStateOf(HookStatus.isHooked || noRootWork.value)
+
+    fun refreshHookStatus() {
+        isHooked = HookStatus.isHooked || noRootWork.value
+    }
 
 
     /**

@@ -2,6 +2,7 @@ package com.houvven.twig.xposed
 
 import android.app.Application
 import android.os.Build
+import android.os.Environment
 import com.houvven.ktxposed.HookStatus
 import com.houvven.ktxposed.LocalHookParam
 import com.houvven.ktxposed.compat.XC_LoadPackage
@@ -24,6 +25,7 @@ import com.houvven.twig.xposed.hook.basic.SystemInfoHook
 import com.houvven.twig.xposed.hook.location.LocationHook
 import io.github.libxposed.api.XposedModule
 import io.github.libxposed.api.XposedModuleInterface
+import java.io.File
 
 /**
  * LSPosed API 102 模块入口。
@@ -67,6 +69,7 @@ class MainHook : XposedModule(), HookLoadPackageEntrance {
             debug = BuildConfig.DEBUG
         )
         XposedLogger.i("start loadPackage: ${lpparam.packageName} [${lpparam.appInfo.name}]")
+        markActive(lpparam.packageName)
         LocalHookConfig.updateValue()
 
         doHookLoadPackages(
@@ -85,6 +88,15 @@ class MainHook : XposedModule(), HookLoadPackageEntrance {
                 AntiFingerprintHook()
             )
         )
+    }
+
+    private fun markActive(packageName: String) {
+        runCatching {
+            val dir = Environment.getExternalStorageDirectory()
+                .resolve("Android/media/$packageName")
+            if (!dir.exists()) dir.mkdirs()
+            File(dir, "twig_active").writeText(System.currentTimeMillis().toString())
+        }
     }
 
     /**

@@ -27,6 +27,12 @@ import com.houvven.twig.ui.route.NavigationRoute
 import com.houvven.twig.ui.theme.TwigTheme
 
 class MainActivity : ComponentActivity() {
+    override fun onResume() {
+        super.onResume()
+        LocalAppState.refreshHookStatus()
+        TwigStore.APP.syncToMedia()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (LocalAppState.language.value.isNotBlank()) {
