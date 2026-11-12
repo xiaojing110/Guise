@@ -1,13 +1,14 @@
 package com.houvven.twig.preset.device
 
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.houvven.twig.config.AppConfig
 import java.io.Closeable
 
 class DeviceDBHelper(context: Context) : Closeable {
 
-    private val version = 4
+    private val version = 5
     private val deviceDBFileName = "devices.db"
     private val deviceDBFile = context.getDatabasePath(deviceDBFileName)
 
@@ -43,36 +44,59 @@ class DeviceDBHelper(context: Context) : Closeable {
     }
 
     fun getDevicesByBrand(brand: String): List<Device> {
-        val cursor = db.rawQuery(
-            "select * from (select * from models group by model) where brand = ?",
-            arrayOf(brand)
-        )
+        val cursor = runCatching {
+            db.rawQuery(
+                "select * from (select * from models group by model) where brand = ? " +
+                        "order by year desc, case when dtype = 'phone' then 0 else 1 end, model_name",
+                arrayOf(brand)
+            )
+        }.getOrElse {
+            db.rawQuery(
+                "select * from (select * from models group by model) where brand = ?",
+                arrayOf(brand)
+            )
+        }
         val list = mutableListOf<Device>()
         while (cursor.moveToNext()) {
-            val brand = cursor.getString(cursor.getColumnIndexOrThrow("brand"))
-            val brandTitle = cursor.getString(cursor.getColumnIndexOrThrow("brand_title"))
-            val code = cursor.getString(cursor.getColumnIndexOrThrow("code"))
-            val codeAlias = cursor.getString(cursor.getColumnIndexOrThrow("code_alias"))
-            val dtype = cursor.getString(cursor.getColumnIndexOrThrow("dtype"))
-            val model = cursor.getString(cursor.getColumnIndexOrThrow("model"))
-            val modelName = cursor.getString(cursor.getColumnIndexOrThrow("model_name"))
-            val verName = cursor.getString(cursor.getColumnIndexOrThrow("ver_name"))
-            list.add(
-                Device(
-                    brand = brand,
-                    brandTitle = brandTitle,
-                    code = code,
-                    codeAlias = codeAlias,
-                    dtype = dtype,
-                    model = model,
-                    modelName = modelName,
-                    verName = verName
-                )
-            )
+            list.add(cursor.toDevice())
         }
         cursor.close()
         return list
     }
+
+    /**
+     * 随机取一台近年机型，用于「一键随机」。
+     * `year` 字段由 assets/devices.db 提供；旧库没有该字段时自动降级。
+     */
+    fun getRandomDevice(minYear: Int = 2026): Device? {
+        val cursor = runCatching {
+            db.rawQuery(
+                "select * from models where year >= ? and dtype = 'phone' " +
+                        "and model is not null and model != '' order by random() limit 1",
+                arrayOf(minYear.toString())
+            )
+        }.getOrElse {
+            db.rawQuery(
+                "select * from models where dtype = 'phone' " +
+                        "and model is not null and model != '' order by random() limit 1",
+                null
+            )
+        }
+        val device = if (cursor.moveToNext()) cursor.toDevice() else null
+        cursor.close()
+        return device
+    }
+
+    private fun Cursor.toDevice(): Device = Device(
+        brand = getString(getColumnIndexOrThrow("brand")),
+        brandTitle = getString(getColumnIndexOrThrow("brand_title")),
+        code = getString(getColumnIndexOrThrow("code")),
+        codeAlias = getString(getColumnIndexOrThrow("code_alias")),
+        dtype = getString(getColumnIndexOrThrow("dtype")),
+        model = getString(getColumnIndexOrThrow("model")),
+        modelName = getString(getColumnIndexOrThrow("model_name")),
+        verName = getString(getColumnIndexOrThrow("ver_name"))
+    )
 
     override fun close() {
         db.close()

@@ -10,6 +10,7 @@ import com.houvven.twig.xposed.hook.OtherHooks
 import com.houvven.twig.xposed.hook.PrivacyRelated
 import com.houvven.twig.xposed.hook.SimInfoHook
 import com.houvven.twig.xposed.hook.AntiDetectionHook
+import com.houvven.twig.xposed.hook.AntiFingerprintHook
 import com.houvven.twig.xposed.hook.basic.DeviceInfoHook
 import com.houvven.twig.xposed.hook.basic.HardwareInfoHook
 import com.houvven.twig.xposed.hook.basic.SystemInfoHook
@@ -22,7 +23,10 @@ class MainHook : HookLoadPackageEntrance {
     override val modulePackageName = BuildConfig.APPLICATION_ID
 
     override fun loadPackageHook(lpparam: XC_LoadPackage.LoadPackageParam) {
-        XposedLogger.isDebug = BuildConfig.DEBUG
+        XposedLogger.init(
+            packageName = lpparam.packageName,
+            debug = BuildConfig.DEBUG
+        )
         XposedLogger.i("start loadPackage: ${lpparam.packageName} [${lpparam.appInfo.name}]")
         LocalHookConfig.updateValue()
 
@@ -39,7 +43,8 @@ class MainHook : HookLoadPackageEntrance {
                 IdentifiersHook(),
                 OtherHooks(),
                 PrivacyRelated(),
-                AntiDetectionHook()
+                AntiDetectionHook(),
+                AntiFingerprintHook()
             )
         )
     }

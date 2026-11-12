@@ -29,7 +29,8 @@ object DevicePreset {
                         else "${it.modelName!!} (${it.verName.removePrefix("#")})"
                     object : PresetAdapter {
                         override val label: String = label
-                        override val value: String = "${it.model!!}:${it.codeAlias ?: ""}"
+                        override val value: String =
+                            "${it.model}:${it.codeAlias?.takeIf { alias -> alias.isNotBlank() } ?: it.model}"
                     }
                 }
         }

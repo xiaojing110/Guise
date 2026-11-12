@@ -12,9 +12,24 @@
 
 ### 📱 设备信息伪装
 - **厂商 / 型号 / 品牌**：一键切换为任意品牌机型
-- **系统版本**：伪装 Android 版本（支持 Android 1 ~ 16）
+- **系统版本**：伪装 Android 版本（支持 Android 1 ~ 17）
 - **Fingerprint / Board / Product**：完整设备指纹伪造
-- **2025/2026 最新机型**：内置 Xiaomi 15、Galaxy S25、Pixel 9、iPhone 16、Mate 70 等
+- **2025/2026 最新机型**：内置 Xiaomi 18 Pro Max / 18 Fold、Galaxy S26、Pixel 11、iPhone 18、Mate 80 等
+
+### 🎲 一键随机与模板
+- **一键随机**：从 2026 年机型库随机生成一整套互相自洽的 Build / 硬件 / 网络 / 标识配置，并立即保存
+- **配置模板**：把当前应用配置保存为模板，一键应用到其他应用
+- **内置模板**：默认内置「小米18 Pro Max」「小米18 Fold」，开箱即用
+- **持久化**：随机结果和用户模板都会写入本地存储，重启不丢失
+
+### 🧾 日志
+- 目标应用进程日志统一写入 `/sdcard/Android/media/<包名>/twig.log`
+- 「日志」页汇总展示、刷新与清空，便于排查 Hook 是否生效
+
+### 🛡️ 防指纹上传
+- **HTTP 请求头清洗**：自动替换 IMEI / 设备 ID / 型号 / 品牌 / MAC / OAID / Fingerprint 等指纹字段
+- **WebView 指纹加噪**：对 Canvas / WebGL / AudioContext / navigator / screen 做一致性加噪
+- **跨应用隔离**：降低同一台设备被多个应用上报后关联的风险
 
 ### 🛡️ 反检测隐身模式
 - 隐藏 **Xposed / LSPosed / EdXposed / Riru** 框架痕迹
@@ -46,22 +61,33 @@
 
 ---
 
-## 🆕 最新机型数据库（2025-2026）
+## 🆕 最新机型数据库（2026）
 
 | 品牌 | 新增机型 |
 |:---|:---|
-| **Xiaomi** | Xiaomi 15 / 15 Pro / 15 Ultra, Redmi Note 14 系列, Redmi K80 系列, POCO F6 Pro / X7 Pro |
-| **Samsung** | Galaxy S25 / S25+ / S25 Ultra, A56 / A36 / A26 / A16, Z Fold7 / Flip7, Tab S10 |
-| **Huawei** | Mate 70 系列, Pura 80 系列, nova 13 系列 |
-| **Google** | Pixel 9 / 9 Pro / 9 Pro XL / 9 Pro Fold / 9a |
-| **Apple** | iPhone 16 / 16 Plus / 16 Pro / 16 Pro Max |
-| **OPPO** | Find X8 / X8 Pro / X8 Ultra |
-| **OnePlus** | OnePlus 13 / 13R |
-| **vivo** | X200 / X200 Pro / X200 Ultra, iQOO 13 |
-| **realme** | GT 7 Pro / GT 7 |
-| **Honor** | Magic7 / Magic7 Pro / Magic7 Ultimate |
+| **Xiaomi** | Xiaomi 18 Pro / 18 Pro Max / 18 Fold / 17 Ultra, Redmi K100 / K100 Pro / K100 Pro Max, Redmi Note 17 系列, Redmi Turbo 5, POCO F9 / X8 系列 |
+| **Samsung** | Galaxy S26 / S26+ / S26 Ultra / S26 FE, Z Fold8 / Z Fold8 Ultra / Z Flip8, A57 / A37 / A27, Galaxy Tab S12 |
+| **Apple** | iPhone 18 Pro / 18 Pro Max / iPhone Duo / 17e, iPad Air 11/13 (2026) |
+| **Huawei** | Mate 90 / 90 Pro / 90 Pro Max / 90 RS Ultimate, Pura 90 系列, nova 16 系列, Mate XT 2 Ultimate |
+| **Google** | Pixel 11 / 11 Pro / 11 Pro XL / 11 Pro Fold, Pixel 10a |
+| **OPPO** | Find X9 Ultra, Find N6, Reno15 / Reno16 系列 |
+| **vivo / iQOO** | X300 Ultra, X Fold6, iQOO 15 Ultra / 15T / Z11 Turbo |
+| **Honor** | Magic8 RSR Porsche Design, Magic V6, Robot Phone, 600 系列 |
+| **OnePlus** | OnePlus 16, 15T, Ace 7 / Ace 7 Pro, Nord 6 |
+| **realme** | 16 Pro / 16 Pro+, Neo8 |
+| **其他** | Motorola Razr Fold、Nothing Phone (4a)/(4b)、Nubia RedMagic 11 系列、Sony Xperia 1 VIII 等 |
 
-> 数据库共 **5100+** 机型，覆盖国内外主流品牌。
+> 数据库共 **5700+** 机型，已补充 2026 年 1 月至 11 月的 400+ 款新机型。
+
+---
+
+## 🎲 一键随机 / 模板 / 日志
+
+- **随机**：配置编辑页右上角骰子或「模板」页右下角骰子，随机生成并保存一套 2026 机型配置
+- **保存模板**：配置编辑页菜单 →「保存为模板」；模板页可删除用户模板
+- **应用模板**：配置编辑页菜单 →「应用模板」，或在模板页点击「应用」并选择目标应用
+- **内置模板**：小米18 Pro Max、小米18 Fold 默认存在，不可删除
+- **日志**：目标应用重启后，在「日志」页刷新查看 `twig.log`，可一键清空
 
 ---
 
@@ -134,16 +160,16 @@ keytool -genkey -v -keystore guisesign.jks -alias guise \
 Guise/
 ├── app/                        # 主应用模块
 │   └── src/main/
-│       ├── assets/devices.db   # 设备数据库（5100+ 机型）
+│       ├── assets/devices.db   # 设备数据库（5700+ 机型，含 2026 年机型）
 │       ├── java/com/houvven/twig/
-│       │   ├── config/         # 配置数据类
+│       │   ├── config/         # 配置数据类 / 模板仓库 / 一键随机
 │       │   ├── preset/         # 预设选项（设备/语言/时区等）
 │       │   ├── ui/             # Jetpack Compose UI
 │       │   │   ├── components/ # 通用组件
-│       │   │   ├── route/      # 页面路由
+│       │   │   ├── route/      # 页面路由（配置 / 模板 / 日志 / 设置）
 │       │   │   └── theme/      # 主题配色
 │       │   └── xposed/         # Xposed Hook 实现
-│       │       ├── hook/       # 各类 Hook（设备/系统/网络/反检测...）
+│       │       ├── hook/       # 各类 Hook（设备/系统/网络/反检测/防指纹上传...）
 │       │       └── MainHook.kt # Hook 入口
 │       └── res/                # 资源文件（中英文）
 ├── androidc/                   # Android 通用工具库
@@ -189,7 +215,16 @@ ls app/build/outputs/apk/release/*.apk
 
 ## 📋 更新日志
 
-### v1.2.0（当前）
+### v1.3.0（当前）
+- ✅ 修复一键随机结果丢失：随机后立即回填并持久化
+- ✅ 新增配置模板：保存 / 应用 / 删除，内置「小米18 Pro Max」「小米18 Fold」
+- ✅ 新增「防指纹上传」：HTTP 指纹请求头清洗 + WebView/JS 指纹加噪
+- ✅ 修复日志：目标应用日志落盘，新增日志查看 / 刷新 / 清空页面
+- ✅ 新增 2026 年 1 月至今 400+ 款机型（Xiaomi 18 系列、Galaxy S26、iPhone 18、Pixel 11 等）
+- ✅ 设备型号选择：无 codename 的机型自动回退到型号代码，避免 DEVICE 为空
+- ✅ 版本号 1.3.0（15）
+
+### v1.2.0
 - ✅ 新增 2025/2026 最新机型（S25、Pixel 9、iPhone 16、Mate 70 等）
 - ✅ 新增 **反检测隐身模式**（隐藏 Xposed/Root/Magisk/Frida 痕迹）
 - ✅ 全新 Indigo/Violet 紫色主题配色

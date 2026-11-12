@@ -16,16 +16,22 @@ object Presets {
 
     val SDK_INT: List<PresetAdapter> by lazy {
         Build.VERSION_CODES::class.java.let { clazz ->
+            val list = mutableListOf<PresetAdapter>()
             clazz.fields
                 .filter { it.isStatic && it.name != "CUR_DEVELOPMENT" }
-                .map {
-                    object : PresetAdapter {
+                .forEach {
+                    list.add(object : PresetAdapter {
                         override val label: String = it.name
                         override val value: String = it.getInt(clazz).toString()
-                    }
+                    })
                 }
-                .sortedBy { it.value.toInt() }
-                .reversed()
+            (34..37).forEach { api ->
+                list.add(object : PresetAdapter {
+                    override val label: String = "API_$api"
+                    override val value: String = api.toString()
+                })
+            }
+            list.sortedBy { it.value.toInt() }.reversed()
         }
     }
 

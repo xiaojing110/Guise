@@ -206,6 +206,8 @@ fun ConfiguredLauncher() {
                     )
                 },
                 actions = {
+                    DSD.RandomButton(manager = this@DeployScreen)
+                    DSD.SaveTemplateButton(manager = this@DeployScreen)
                     DSD.ClearButton(manager = this@DeployScreen)
                     DSD.SaveButton(manager = this@DeployScreen)
                 },

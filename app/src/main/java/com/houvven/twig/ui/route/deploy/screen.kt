@@ -220,9 +220,10 @@ private fun ConfigurationItem(launch: () -> Unit) = LocalConfigState.currentStat
             preset = DevicePreset.getModelsPreset(MANUFACTURER.value),
             showOperateIcon = DevicePreset.allBrands.containsKey(MANUFACTURER.value),
             set = {
-                val (model, codeAlias) = it.split(":")
-                MODEL.value = model
-                DEVICE.value = codeAlias
+                val parts = it.split(":", limit = 2)
+                MODEL.value = parts.first()
+                DEVICE.value = parts.getOrElse(1) { parts.first() }
+                    .ifBlank { parts.first() }
             }
         )
         Input(state = DEVICE, label = { "Device" }, placeholder = { Build.DEVICE })
@@ -409,6 +410,10 @@ private fun ConfigurationItem(launch: () -> Unit) = LocalConfigState.currentStat
     }
     ItemContainer(icon = Icons.Outlined.Shield, title = { stringResource(id = R.string.deploy_title_anti_detection) }) {
         SwitchInput(state = ANTI_DETECTION, label = { stringResource(id = R.string.deploy_anti_detection_enable) })
+        SwitchInput(
+            state = ANTI_FINGERPRINT,
+            label = { stringResource(id = R.string.deploy_anti_fingerprint_enable) }
+        )
     }
     ItemContainer(icon = Icons.Outlined.Settings, title = { stringResource(id = R.string.deploy_title_disable_sensor) }) {
 

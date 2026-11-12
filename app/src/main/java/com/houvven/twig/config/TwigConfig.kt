@@ -101,6 +101,9 @@ sealed interface TwigConfig {
     // 反检测
     val ANTI_DETECTION: Any
 
+    // 防指纹上传（WebView/JS 指纹加噪、HTTP 指纹请求头清洗）
+    val ANTI_FINGERPRINT: Any
+
     @Serializable
     data class Config(
         @Transient
@@ -159,6 +162,7 @@ sealed interface TwigConfig {
         override val BLANK_PASS_AUDIO: Boolean = false,
         override val BLANK_PASS_CONTACTS: Boolean = false,
         override val ANTI_DETECTION: Boolean = false,
+        override val ANTI_FINGERPRINT: Boolean = false,
     ) : TwigConfig {
         @Transient
         val isEnable: Boolean get() = this != default.copy(packageName = packageName)
@@ -226,6 +230,7 @@ sealed interface TwigConfig {
         override lateinit var BLANK_PASS_AUDIO: MutableState<Boolean>
         override lateinit var BLANK_PASS_CONTACTS: MutableState<Boolean>
         override lateinit var ANTI_DETECTION: MutableState<Boolean>
+        override lateinit var ANTI_FINGERPRINT: MutableState<Boolean>
 
 
         init {
@@ -261,6 +266,22 @@ sealed interface TwigConfig {
 
         infix fun setState(state: State) {
             this.state = state
+        }
+
+        /**
+         * 用一份完整配置替换当前编辑状态（一键随机 / 应用模板）。
+         * packageName 保留当前应用，避免模板串包。
+         */
+        fun apply(config: Config) {
+            this.state = State.of(config.copy(packageName = this.config.packageName))
+        }
+
+        /**
+         * 生成当前编辑状态的快照，用于保存为模板。
+         */
+        fun snapshot(): Config {
+            updateConfigFromState()
+            return config.copy(packageName = "")
         }
 
         fun stopApp(context: Context, packageName: String) {
