@@ -127,9 +127,9 @@ class AntiFingerprintHook : TwigHookAdapter {
     private fun fingerprint(): String {
         val configured = valueOf(config.FINGERPRINT, "")
         if (configured.isNotBlank()) return configured
-        val model = model()
+        val deviceModel = model()
         val release = valueOf(config.RELEASE, Build.VERSION.RELEASE)
-        return "${brand()}/$model/$model:$release/BP2A.260901.001/OS4.0.1.0.WPBCNXM:user/release-keys"
+        return "${brand()}/$deviceModel/$deviceModel:$release/BP2A.260901.001/OS4.0.1.0.WPBCNXM:user/release-keys"
     }
 
     // -------------------------------------------------------------- OkHttp
@@ -216,9 +216,9 @@ class AntiFingerprintHook : TwigHookAdapter {
 
     private fun userAgent(): String {
         val release = valueOf(config.RELEASE, Build.VERSION.RELEASE)
-        val model = model()
+        val deviceModel = model()
         val buildId = "BP2A.260901.001"
-        return "Mozilla/5.0 (Linux; Android $release; $model Build/$buildId; wv) " +
+        return "Mozilla/5.0 (Linux; Android $release; $deviceModel Build/$buildId; wv) " +
                 "AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/131.0.0.0 Mobile Safari/537.36"
     }
 
@@ -234,11 +234,11 @@ class AntiFingerprintHook : TwigHookAdapter {
     private fun q(value: String): String = JSONObject.quote(value)
 
     private fun buildScript(): String {
-        val model = model()
+        val deviceModel = model()
         val ua = userAgent()
         val width = valueOf(config.DISPLAY_WIDTH, "1080").toIntOrNull() ?: 1080
         val height = valueOf(config.DISPLAY_HEIGHT, "2400").toIntOrNull() ?: 2400
-        val seed = (model.hashCode() and 0x7) + 1
+        val seed = (deviceModel.hashCode() and 0x7) + 1
         val n1 = seed
         val n2 = (seed * 3 + 1) and 0x7
         val n3 = (seed * 5 + 2) and 0x7
