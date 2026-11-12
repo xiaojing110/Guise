@@ -8,7 +8,7 @@ import java.io.Closeable
 
 class DeviceDBHelper(context: Context) : Closeable {
 
-    private val version = 5
+    private val version = 7
     private val deviceDBFileName = "devices.db"
     private val deviceDBFile = context.getDatabasePath(deviceDBFileName)
 
@@ -47,7 +47,8 @@ class DeviceDBHelper(context: Context) : Closeable {
         val cursor = runCatching {
             db.rawQuery(
                 "select * from (select * from models group by model) where brand = ? " +
-                        "order by year desc, case when dtype = 'phone' then 0 else 1 end, model_name",
+                        "order by coalesce(year, 0) desc, " +
+                        "case when dtype = 'phone' then 0 else 1 end, model_name",
                 arrayOf(brand)
             )
         }.getOrElse {

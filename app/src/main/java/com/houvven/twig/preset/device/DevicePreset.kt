@@ -23,6 +23,8 @@ object DevicePreset {
         return DeviceDBHelper(ContextAmbient.current).use { dbHelper ->
             dbHelper.getDevicesByBrand(brand)
                 .filterNot { it.modelName.isNullOrBlank() || it.model.isNullOrBlank() }
+                .filterNot { isInternationalRegion(it.verName) }
+                .distinctBy { it.modelName }
                 .map {
                     val label =
                         if (it.verName == "#" || it.verName == null) it.modelName!!
@@ -34,6 +36,20 @@ object DevicePreset {
                     }
                 }
         }
+    }
+
+    private fun isInternationalRegion(verName: String?): Boolean {
+        val value = verName.orEmpty().lowercase()
+        if (value.isBlank() || value == "#") return false
+        return value.contains("global") ||
+                value.contains("国际") ||
+                value.contains("india") ||
+                value.contains("korea") ||
+                value.contains("japan") ||
+                value.contains("europe") ||
+                value == "#us" ||
+                value == "#usa" ||
+                value == "#u.s."
     }
 
 }

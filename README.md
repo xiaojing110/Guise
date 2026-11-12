@@ -78,7 +78,7 @@
 | **realme** | 16 Pro / 16 Pro+, Neo8 |
 | **其他** | Motorola Razr Fold、Nothing Phone (4a)/(4b)、Nubia RedMagic 11 系列、Sony Xperia 1 VIII 等 |
 
-> 数据库共 **5700+** 机型，已补充 2026 年 1 月至 11 月的 400+ 款新机型。
+> 数据库共 **4500+** 国行/中国大陆机型，已补充 2026 年 1 月至 11 月的 400+ 款新机型。
 
 ---
 
@@ -161,7 +161,7 @@ keytool -genkey -v -keystore guisesign.jks -alias guise \
 Guise/
 ├── app/                        # 主应用模块
 │   └── src/main/
-│       ├── assets/devices.db   # 设备数据库（5700+ 机型，含 2026 年机型）
+│       ├── assets/devices.db   # 国行机型数据库（4500+ 机型，含 2026 年机型）
 │       ├── java/com/houvven/twig/
 │       │   ├── config/         # 配置数据类 / 模板仓库 / 一键随机
 │       │   ├── preset/         # 预设选项（设备/语言/时区等）
@@ -216,7 +216,20 @@ ls app/build/outputs/apk/release/*.apk
 
 ## 📋 更新日志
 
-### v1.4.0（当前）
+### v1.4.2（当前）
+- ✅ 机型库只保留国行/中国大陆版本，删除国际版、美版、韩版、印度版、日版、欧版、港台版等区域变体
+- ✅ 2026 新机型默认排在最前
+- ✅ 数据库版本升至 7，更新后自动替换旧机型库
+- ✅ 版本号 1.4.2（18）
+
+### v1.4.1
+- ✅ 机型列表隐藏国际版/美版/韩版/印度版等区域变体
+- ✅ 2026 新机型默认排在最前，且不再显示 `(Global)` 后缀
+- ✅ 数据库版本升至 6，更新后自动替换旧机型库
+- ✅ 修复激活状态检测与目标应用配置回退读取
+- ✅ 版本号 1.4.1（17）
+
+### v1.4.0
 - ✅ 迁移到 **LSPosed API 102**：入口改为 `XposedModule`，Hook 走 `XposedInterface`
 - ✅ `ktxposed` 增加旧 Xposed API 兼容层，现有设备/网络/反检测 Hook 无需重写
 - ✅ 移除对 `de.robv.android.xposed:api:82` 的构建依赖，改用本地 API 102 编译桩
