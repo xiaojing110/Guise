@@ -35,7 +35,8 @@ open class XC_MethodHook @JvmOverloads constructor(
         private val chain: XposedInterface.Chain
     ) {
         val method: Member get() = chain.executable
-        val thisObject: Any? get() = chain.thisObject
+        val thisObject: Any get() = chain.thisObject
+            ?: throw IllegalStateException("thisObject is null for ${chain.executable}")
 
         var args: Array<Any?> = chain.args.toTypedArray()
 

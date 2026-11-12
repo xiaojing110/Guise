@@ -42,7 +42,7 @@ object AppInfoHook : TwigHookAdapter {
 
         runXposedCatching {
             findClass("android.app.ActivityThread") {
-                val currentAT = callStaticMethod("currentActivityThread").getOrThrow()
+                val currentAT = callStaticMethod("currentActivityThread").getOrThrow()!!
                 val ipm = currentAT.getInstanceField<Any>("sPackageManager")
                 val ipmClass =
                     Class.forName("android.content.pm.IPackageManager") ?: return@findClass
