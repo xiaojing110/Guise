@@ -1,8 +1,8 @@
 package com.houvven.ktxposed.hook.method
 
 import com.houvven.ktxposed.log.XposedLogger
-import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.callbacks.XCallback
+import com.houvven.ktxposed.compat.XC_MethodHook
+import com.houvven.ktxposed.compat.XCallback
 
 @Suppress("unused")
 data class MethodHook(

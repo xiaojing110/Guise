@@ -13,7 +13,7 @@ import com.houvven.ktxposed.log.XposedLogger
 import com.houvven.twig.config.AppConfig
 import com.houvven.twig.config.TwigConfig
 import com.houvven.twig.ui.LocalAppState
-import de.robv.android.xposed.XSharedPreferences
+import com.houvven.ktxposed.compat.XSharedPreferences
 import java.io.File
 
 

@@ -16,7 +16,7 @@ lottie-compose = "6.0.0"
 mmkv = "1.2.15"
 richtext-commonmark = "0.16.0"
 room = "2.5.0"
-xposed-api = "82"
+xposed-api = "102.0.0"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
@@ -49,7 +49,7 @@ richtext-commonmark = { module = "com.halilibo.compose-richtext:richtext-commonm
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
-xposed-api = { module = "de.robv.android.xposed:api", version.ref = "xposed-api" }
+xposed-api = { module = "io.github.libxposed:api", version.ref = "xposed-api" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }

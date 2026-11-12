@@ -1,25 +1,29 @@
 package com.houvven.ktxposed
 
-import android.annotation.SuppressLint
-import android.app.AndroidAppHelper
 import android.content.Context
-import de.robv.android.xposed.XposedBridge
-import de.robv.android.xposed.callbacks.XC_LoadPackage
+import com.houvven.ktxposed.compat.XC_LoadPackage
+import com.houvven.ktxposed.compat.XposedBridge
 
 @Suppress("unused")
 object LocalHookParam {
+
     /**
      * @see XC_LoadPackage.LoadPackageParam
      */
     lateinit var lpparam: XC_LoadPackage.LoadPackageParam
-        internal set
 
     /**
-     * @see Context
-     * @see AndroidAppHelper.currentApplication
+     * 目标进程的 Application Context。
+     *
+     * API 102 不再提供 android.app.AndroidAppHelper，这里通过
+     * ActivityThread.currentApplication() 获取。
      */
-    @get:SuppressLint("StaticFieldLeak")
-    val context: Context by lazy { AndroidAppHelper.currentApplication().applicationContext }
+    val context: Context by lazy {
+        val app = Class.forName("android.app.ActivityThread")
+            .getMethod("currentApplication")
+            .invoke(null)
+        app as Context
+    }
 
     val BOOT_CLASS_LOADER: ClassLoader get() = XposedBridge.BOOTCLASSLOADER
 }

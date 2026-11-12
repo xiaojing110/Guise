@@ -3,7 +3,7 @@
 package com.houvven.ktxposed.hook.method
 
 import com.houvven.ktxposed.util.runXposedCatching
-import de.robv.android.xposed.XposedHelpers
+import com.houvven.ktxposed.compat.XposedHelpers
 import kotlin.reflect.KClass
 
 

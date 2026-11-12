@@ -8,7 +8,7 @@ import com.houvven.ktxposed.hook.method.afterHookMethod
 import com.houvven.ktxposed.log.XposedLogger
 import com.houvven.twig.TwigStore
 import com.houvven.twig.xposed.adapter.TwigHookAdapter
-import de.robv.android.xposed.XC_MethodHook
+import com.houvven.ktxposed.compat.XC_MethodHook
 
 class IdentifiersHook : TwigHookAdapter {
 

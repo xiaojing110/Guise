@@ -107,7 +107,7 @@ dependencies {
     compileOnly(project(":abcl"))
     implementation(project(":androidc"))
     implementation(project(":ktxposed"))
-    compileOnly(libs.xposed.api)
+    compileOnly(files(rootProject.file("libs/libxposed-api-102.jar")))
     implementation(libs.mmkv)
     implementation(libs.appcompat)
     implementation(libs.core.ktx)

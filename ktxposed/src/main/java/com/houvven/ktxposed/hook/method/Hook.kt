@@ -4,7 +4,7 @@ package com.houvven.ktxposed.hook.method
 
 
 import com.houvven.ktxposed.util.toClasses
-import de.robv.android.xposed.XC_MethodHook
+import com.houvven.ktxposed.compat.XC_MethodHook
 import java.lang.reflect.Method
 import kotlin.reflect.KClass
 

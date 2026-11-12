@@ -15,6 +15,7 @@
 - **系统版本**：伪装 Android 版本（支持 Android 1 ~ 17）
 - **Fingerprint / Board / Product**：完整设备指纹伪造
 - **2025/2026 最新机型**：内置 Xiaomi 18 Pro Max / 18 Fold、Galaxy S26、Pixel 11、iPhone 18、Mate 80 等
+- **LSPosed API 102**：模块入口已迁移到 `io.github.libxposed.api.XposedModule`
 
 ### 🎲 一键随机与模板
 - **一键随机**：从 2026 年机型库随机生成一整套互相自洽的 Build / 硬件 / 网络 / 标识配置，并立即保存
@@ -215,7 +216,13 @@ ls app/build/outputs/apk/release/*.apk
 
 ## 📋 更新日志
 
-### v1.3.0（当前）
+### v1.4.0（当前）
+- ✅ 迁移到 **LSPosed API 102**：入口改为 `XposedModule`，Hook 走 `XposedInterface`
+- ✅ `ktxposed` 增加旧 Xposed API 兼容层，现有设备/网络/反检测 Hook 无需重写
+- ✅ 移除对 `de.robv.android.xposed:api:82` 的构建依赖，改用本地 API 102 编译桩
+- ✅ 版本号 1.4.0（16）
+
+### v1.3.0
 - ✅ 修复一键随机结果丢失：随机后立即回填并持久化
 - ✅ 新增配置模板：保存 / 应用 / 删除，内置「小米18 Pro Max」「小米18 Fold」
 - ✅ 新增「防指纹上传」：HTTP 指纹请求头清洗 + WebView/JS 指纹加噪

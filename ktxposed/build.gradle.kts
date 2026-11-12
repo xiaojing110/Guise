@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-    compileOnly(libs.xposed.api)
+    compileOnly(files(rootProject.file("libs/libxposed-api-102.jar")))
     implementation(project(":androidc"))
     implementation(libs.core.ktx)
     implementation(libs.appcompat)

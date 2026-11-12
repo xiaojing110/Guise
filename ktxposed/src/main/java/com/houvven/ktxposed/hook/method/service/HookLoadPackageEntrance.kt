@@ -1,40 +1,20 @@
 package com.houvven.ktxposed.hook.method.service
 
-import com.houvven.ktxposed.HookStatus
-import com.houvven.ktxposed.hook.method.afterSetMethodResult
-import com.houvven.ktxposed.hook.method.findClass
-import com.houvven.ktxposed.log.XposedLogger
-import de.robv.android.xposed.callbacks.XC_LoadPackage
+import com.houvven.ktxposed.compat.XC_LoadPackage
 
 /**
- * 主Hook入口接口
- * @author Houvven
+ * 主 Hook 入口接口。
+ *
+ * LSPosed API 102 的入口由 MainHook 继承 XposedModule 完成，这里只保留
+ * 按包分发 Hook 的职责。
  */
-interface HookLoadPackageEntrance : Basic {
+interface HookLoadPackageEntrance {
 
     val modulePackageName: String
 
-    override fun handleLoadPackage(lpparam: XC_LoadPackage.LoadPackageParam) {
-        super.handleLoadPackage(lpparam)
-        if (lpparam.packageName == modulePackageName) {
-            doActivateModule()
-        } else {
-            loadPackageHook(lpparam)
-        }
-    }
-
     fun loadPackageHook(lpparam: XC_LoadPackage.LoadPackageParam)
 
-    private fun doActivateModule() {
-        findClass(HookStatus.Companion::class.java.name) {
-            XposedLogger.d("HookStatus isHooked: ${HookStatus.isHooked}")
-            afterSetMethodResult("isHooked") { true }
-        }
-    }
-
     fun doHookLoadPackages(hooks: List<HookLoadPackage>) {
-        hooks.forEach {
-            it.onHook()
-        }
+        hooks.forEach { it.onHook() }
     }
 }

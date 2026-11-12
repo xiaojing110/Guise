@@ -55,9 +55,6 @@
             android:name="xposeddescription"
             android:value="为你的Android设备上的APP传递你所想传递的设备参数" />
         <meta-data
-            android:name="xposedminversion"
-            android:value="93" />
-        <meta-data
             android:name="xposedsharedprefs"
             android:value="true" />
     </application>

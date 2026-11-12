@@ -4,7 +4,7 @@
 package com.houvven.ktxposed.hook.method
 
 import com.houvven.ktxposed.LocalHookParam
-import de.robv.android.xposed.XposedHelpers
+import com.houvven.ktxposed.compat.XposedHelpers
 import java.lang.reflect.Constructor
 import java.lang.reflect.Field
 import java.lang.reflect.Method

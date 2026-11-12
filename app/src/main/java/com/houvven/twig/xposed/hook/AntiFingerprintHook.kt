@@ -8,7 +8,7 @@ import com.houvven.ktxposed.hook.method.findClassOrNull
 import com.houvven.ktxposed.log.XposedLogger
 import com.houvven.ktxposed.util.runXposedCatching
 import com.houvven.twig.xposed.adapter.TwigHookAdapter
-import de.robv.android.xposed.XC_MethodHook
+import com.houvven.ktxposed.compat.XC_MethodHook
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URLConnection

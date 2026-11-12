@@ -4,9 +4,9 @@ package com.houvven.ktxposed.hook.method
 
 import com.houvven.ktxposed.util.runXposedCatching
 import com.houvven.ktxposed.util.toClasses
-import de.robv.android.xposed.XC_MethodHook
-import de.robv.android.xposed.XC_MethodReplacement
-import de.robv.android.xposed.XposedBridge
+import com.houvven.ktxposed.compat.XC_MethodHook
+import com.houvven.ktxposed.compat.XC_MethodReplacement
+import com.houvven.ktxposed.compat.XposedBridge
 import java.lang.reflect.Member
 import java.lang.reflect.Method
 import kotlin.reflect.KClass
