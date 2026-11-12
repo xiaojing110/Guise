@@ -78,7 +78,7 @@
 | **realme** | 16 Pro / 16 Pro+, Neo8 |
 | **其他** | Motorola Razr Fold、Nothing Phone (4a)/(4b)、Nubia RedMagic 11 系列、Sony Xperia 1 VIII 等 |
 
-> 数据库共 **4500+** 国行/中国大陆机型，已补充 2026 年 1 月至 11 月的 400+ 款新机型。
+> 数据库共 **4300+** 国行/中国大陆机型，已补充 2026 年 1 月至 11 月的 200+ 款新机型。
 
 ---
 
@@ -161,7 +161,7 @@ keytool -genkey -v -keystore guisesign.jks -alias guise \
 Guise/
 ├── app/                        # 主应用模块
 │   └── src/main/
-│       ├── assets/devices.db   # 国行机型数据库（4500+ 机型，含 2026 年机型）
+│       ├── assets/devices.db   # 国行机型数据库（4300+ 机型，含 2026 年机型）
 │       ├── java/com/houvven/twig/
 │       │   ├── config/         # 配置数据类 / 模板仓库 / 一键随机
 │       │   ├── preset/         # 预设选项（设备/语言/时区等）
@@ -216,7 +216,15 @@ ls app/build/outputs/apk/release/*.apk
 
 ## 📋 更新日志
 
-### v1.4.2（当前）
+### v1.4.3（当前）
+- ✅ 2026 机型代号改为国行代号（如 Xiaomi 18 Pro Max：`M154FF`，Xiaomi 18 Pro：`M610BB`，Xiaomi 18 Fold：`2608BPX34C`）
+- ✅ 删除 2026 中没有国行版本或仍使用国际代号的机型（CPH/RMX/三星 B/U/N、Pixel、Nothing 等）
+- ✅ 内置「小米18 Pro Max」「小米18 Fold」模板同步改为国行代号/代号设备名
+- ✅ 2026 国行新机型默认排在最前
+- ✅ 数据库版本升至 8，更新后自动替换旧机型库
+- ✅ 版本号 1.4.3（19）
+
+### v1.4.2
 - ✅ 机型库只保留国行/中国大陆版本，删除国际版、美版、韩版、印度版、日版、欧版、港台版等区域变体
 - ✅ 2026 新机型默认排在最前
 - ✅ 数据库版本升至 7，更新后自动替换旧机型库
